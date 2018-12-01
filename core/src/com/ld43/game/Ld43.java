@@ -16,6 +16,7 @@ import com.ld43.game.entity.system.BoatVelocitySystem;
 import com.ld43.game.entity.system.MovementSystem;
 import com.ld43.game.entity.system.ProjectileLauncherSystem;
 import com.ld43.game.graphics.TextureRegistry;
+import com.ld43.game.input.RoutePlanner;
 import com.ld43.game.map.TileMap;
 import com.ld43.game.map.tiles.Tile;
 import com.ld43.game.map.tiles.WaterTile;
@@ -24,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Ld43 extends ApplicationAdapter {
+	public static final int NUM_OF_TILES = 31;
+
 	SpriteBatch batch;
 	TileMap map;
 
@@ -42,11 +45,11 @@ public class Ld43 extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
-
         TextureRegistry.loadTextures();
 		map =  TileMap.fromFile("tiles/WaterTileMap.json");
 
 		batch = new SpriteBatch();
+
 
 		camera = new OrthographicCamera(31*32, 31*32);
 
@@ -57,16 +60,14 @@ public class Ld43 extends ApplicationAdapter {
 		boat.add(new PositionComponent(16f, 16f));
 		boat.add(new VelocityComponent(32f, 32f, 32f));
 
-//		List<Tile> tiles = Arrays.asList(map.getTiles());
-		List<Tile> tiles = new ArrayList<Tile>();
-		tiles.add(new WaterTile(0,0,false));
-		tiles.add(new WaterTile(5,5, false));
-		tiles.add(new WaterTile(7,4, false));
-		tiles.add(new WaterTile(5,3, false));
-		tiles.add(new WaterTile(3,4, false));
-		tiles.add(new WaterTile(5,5, false));
+		List<Tile> waypoints = new ArrayList<Tile>();
+		waypoints.add(new WaterTile(0,0,false));
+		waypoints.add(new WaterTile(5,5, false));
 
-		boat.add(new RouteComponent(tiles));
+		RoutePlanner inputProcessor = new RoutePlanner(map, waypoints);
+		Gdx.input.setInputProcessor(inputProcessor);
+
+		boat.add(new RouteComponent(waypoints));
 		engine.addEntity(boat);
 
 		tower.add(new RenderableComponent(TextureRegistry.getTexture("projectile"), 64, 64));

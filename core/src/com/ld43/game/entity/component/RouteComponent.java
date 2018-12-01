@@ -23,9 +23,11 @@ public class RouteComponent implements Component {
     }
 
     public void updateWaypoint(float x, float y) {
+        if(complete) { return; }
         Tile tile = tiles.get(tileIndex + 1);
 
         double distance = Math.sqrt(Math.pow(tile.getX() - x, 2) + Math.pow(tile.getY() - y, 2));
+
         if(distance < 2f) {
             tileIndex += 1;
             complete = tileIndex + 1 >= tiles.size();

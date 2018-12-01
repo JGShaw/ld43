@@ -18,15 +18,12 @@ public class TileMap {
     private Tile[] tiles;
 
     public TileMap(int widthInTiles, int heightInTiles, Tile[] tiles) {
-
         this.widthInTiles = widthInTiles;
         this.heightInTiles = heightInTiles;
         this.tiles = tiles;
-
     }
 
     public void render(Batch batch){
-
         for (int y = 0; y < heightInTiles; y++) {
             for (int x = 0; x < widthInTiles; x++) {
                 Tile tile = tiles[x + y * widthInTiles];
@@ -47,6 +44,10 @@ public class TileMap {
         }
 
         return tiles[x + y * widthInTiles];
+    }
+
+    public void setTile(int tileX, int tileY, Tile tile) {
+        tiles[tileX + tileY* widthInTiles] = tile;
     }
 
     public String toString() {
