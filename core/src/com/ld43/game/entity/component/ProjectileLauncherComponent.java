@@ -2,6 +2,7 @@ package com.ld43.game.entity.component;
 
 import com.badlogic.ashley.core.Component;
 import com.ld43.game.entity.projectiles.ProjectileTimer;
+import com.ld43.game.entity.projectiles.ProjectileType;
 
 import java.util.ArrayList;
 
@@ -11,7 +12,10 @@ public class ProjectileLauncherComponent implements Component {
 
     public ProjectileLauncherComponent(){
         availableProjectiles = new ArrayList<ProjectileTimer>();
-        availableProjectiles.add(new ProjectileTimer("0", 0.1f, 2f));
+        availableProjectiles.add(new ProjectileTimer(ProjectileType.PROJECTILE_HUGE, 10f, 3f));
+        availableProjectiles.add(new ProjectileTimer(ProjectileType.PROJECTILE_LARGE, 6f, 2f));
+        availableProjectiles.add(new ProjectileTimer(ProjectileType.PROJECTILE_MEDIUM, 3f, 1f));
+        availableProjectiles.add(new ProjectileTimer(ProjectileType.PROJECTILE_SMALL, 0.5f, 0f));
     }
 
     public void updateTimeouts(final float deltaTime){
@@ -23,9 +27,9 @@ public class ProjectileLauncherComponent implements Component {
     }
 
 
-    public String getFirstAvailable() {
+    public ProjectileType getFirstAvailable() {
 
-        String projectile = null;
+        ProjectileType projectile = null;
 
         for (ProjectileTimer timer : availableProjectiles) {
             if(timer.isAvailable()){

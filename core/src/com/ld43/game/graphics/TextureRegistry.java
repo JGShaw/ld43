@@ -1,8 +1,6 @@
 package com.ld43.game.graphics;
 
 import com.badlogic.gdx.graphics.Texture;
-
-import javax.xml.soap.Text;
 import java.util.HashMap;
 
 public class TextureRegistry {
@@ -25,7 +23,10 @@ public class TextureRegistry {
 
     public static void loadTextures(){
 
-        registerTexture("projectile", "entities/projectiles/0.png");
+        registerTexture("projectile-small", "entities/projectiles/small.png");
+        registerTexture("projectile-medium", "entities/projectiles/medium.png");
+        registerTexture("projectile-large", "entities/projectiles/large.png");
+        registerTexture("projectile-huge", "entities/projectiles/huge.png");
         defaultTexture = new Texture("badlogic.jpg");
 
     }

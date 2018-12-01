@@ -2,11 +2,11 @@ package com.ld43.game.entity.projectiles;
 
 public class ProjectileTimer {
 
-    public String projectileId;
+    public ProjectileType projectileId;
     public float timeout;
     public float timeUntilAvailable;
 
-    public ProjectileTimer(String projectileId, float timeout, float initialTimeout) {
+    public ProjectileTimer(ProjectileType projectileId, float timeout, float initialTimeout) {
         this.projectileId = projectileId;
         this.timeout = timeout;
         this.timeUntilAvailable = initialTimeout;

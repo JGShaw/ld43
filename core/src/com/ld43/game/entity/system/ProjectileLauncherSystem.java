@@ -5,11 +5,10 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.MathUtils;
 import com.ld43.game.entity.component.PositionComponent;
 import com.ld43.game.entity.component.ProjectileLauncherComponent;
-import com.ld43.game.entity.component.VelocityComponent;
 import com.ld43.game.entity.projectiles.ProjectileBuilder;
-import com.ld43.game.entity.projectiles.ProjectileTimer;
+import com.ld43.game.entity.projectiles.ProjectileType;
 
-import javax.swing.text.Position;
+import static com.ld43.game.entity.projectiles.ProjectileType.PROJECTILE_SMALL;
 
 public class ProjectileLauncherSystem extends EntitySystem {
     private ImmutableArray<Entity> entities;
@@ -31,13 +30,11 @@ public class ProjectileLauncherSystem extends EntitySystem {
 
             projectileLauncher.updateTimeouts(deltaTime);
 
-            String projectileId = projectileLauncher.getFirstAvailable();
+            ProjectileType projectileId = projectileLauncher.getFirstAvailable();
 
             if(projectileId != null) {
-                float angle = MathUtils.random(360f);
-                float xVel = MathUtils.cosDeg(angle) * 200f;
-                float yVel = MathUtils.sinDeg(angle) * 200f;
-                Entity p = ProjectileBuilder.projectile(projectileId, position.x, position.y, xVel, yVel);
+                float angle = MathUtils.random(0, 2 * MathUtils.PI);
+                Entity p = ProjectileBuilder.projectile(projectileId, position.x, position.y, angle);
 
                 getEngine().addEntity(p);
             }

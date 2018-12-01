@@ -1,6 +1,7 @@
 package com.ld43.game.entity.projectiles;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.MathUtils;
 import com.ld43.game.entity.component.PositionComponent;
 import com.ld43.game.entity.component.RenderableComponent;
 import com.ld43.game.entity.component.VelocityComponent;
@@ -8,13 +9,34 @@ import com.ld43.game.graphics.TextureRegistry;
 
 public class ProjectileBuilder {
 
-    public static Entity projectile(String projectileId, float xPos, float yPos, float xVel, float yVel){
+    public static Entity projectile(ProjectileType projectileId, float xPos, float yPos, float angle){
 
         Entity entity = new Entity();
-
         entity.add(new PositionComponent(xPos, yPos));
-        entity.add(new VelocityComponent(xVel, yVel, 0));
-        entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile"), 4, 4));
+
+        float xVelComp = MathUtils.cos(angle);
+        float yVelComp = MathUtils.sin(angle);
+
+        switch (projectileId) {
+            case PROJECTILE_SMALL:
+                entity.add(new VelocityComponent(xVelComp * 200, yVelComp * 200, 0));
+                entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile-small"), 4, 4));
+                break;
+            case PROJECTILE_MEDIUM:
+                entity.add(new VelocityComponent(xVelComp * 150, yVelComp * 150, 0));
+                entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile-medium"), 6, 6));
+                break;
+            case PROJECTILE_LARGE:
+                entity.add(new VelocityComponent(xVelComp * 100, yVelComp * 100, 0));
+                entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile-large"), 8, 8));
+                break;
+            case PROJECTILE_HUGE:
+                entity.add(new VelocityComponent(xVelComp * 50, yVelComp * 50, 0));
+                entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile-huge"), 14, 14));
+                break;
+            default:
+                return null;
+        }
 
         return entity;
     }
