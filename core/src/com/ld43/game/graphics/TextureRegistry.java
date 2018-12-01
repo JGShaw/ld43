@@ -28,8 +28,8 @@ public class TextureRegistry {
         registerTexture("projectile--large", "entities/projectiles/large.png");
         registerTexture("projectile--huge", "entities/projectiles/huge.png");
 
-        registerTexture("tile-water--light", "tiles/water_0.png");
-        registerTexture("tile-water--dark", "tiles/darkWater2_0.png");
+        registerTexture("tile-water--light", "tiles/water.png");
+        registerTexture("tile-water--dark", "tiles/darkWater.png");
 
         defaultTexture = new Texture("badlogic.jpg");
 
