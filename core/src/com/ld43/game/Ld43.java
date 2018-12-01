@@ -10,12 +10,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.ld43.game.entity.component.*;
-import com.ld43.game.entity.component.PositionComponent;
-import com.ld43.game.entity.component.RenderableComponent;
-import com.ld43.game.entity.component.RouteComponent;
-import com.ld43.game.entity.component.VelocityComponent;
 import com.ld43.game.entity.system.BoatVelocitySystem;
 import com.ld43.game.entity.system.MovementSystem;
 import com.ld43.game.entity.system.ProjectileLauncherSystem;
@@ -26,11 +21,6 @@ import com.ld43.game.map.tiles.WaterTile;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 
 public class Ld43 extends ApplicationAdapter {
 	SpriteBatch batch;

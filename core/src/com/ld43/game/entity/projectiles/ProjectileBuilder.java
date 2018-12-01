@@ -13,7 +13,7 @@ public class ProjectileBuilder {
         Entity entity = new Entity();
 
         entity.add(new PositionComponent(xPos, yPos));
-        entity.add(new VelocityComponent(xVel, yVel));
+        entity.add(new VelocityComponent(xVel, yVel, 0));
         entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile"), 4, 4));
 
         return entity;
