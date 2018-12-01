@@ -23,11 +23,16 @@ public class TileMap {
 
         for (int y = 0; y < heightInTiles; y++) {
             for (int x = 0; x < widthInTiles; x++) {
-                Texture img = tiles[x + y * widthInTiles].getTexture();
-                batch.draw(img, x * 32, y * 32, 32, 32);
+                Tile tile = tiles[x + y * widthInTiles];
+                Texture img = tile.getTexture();
+                batch.draw(img, tile.getX() - Tile.TILE_WIDTH / 2, tile.getY() - Tile.TILE_WIDTH / 2, Tile.TILE_WIDTH, Tile.TILE_WIDTH);
             }
         }
 
+    }
+
+    public Tile[] getTiles() {
+        return tiles;
     }
 
     public String toString() {
