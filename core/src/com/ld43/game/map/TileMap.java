@@ -3,10 +3,7 @@ package com.ld43.game.map;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.ld43.game.map.tiles.LandTile;
-import com.ld43.game.map.tiles.Tile;
-import com.ld43.game.map.tiles.WaterTile;
-
-import java.util.Random;
+import com.ld43.game.map.tiles.*;
 
 public class TileMap {
 
@@ -56,6 +53,30 @@ public class TileMap {
             for (int y = 0; y < heightInTiles; y++) {
                 boolean solid = x == 0 || x == widthInTiles - 1 || y == 0 || y == heightInTiles - 1;
                 tiles[x + y * widthInTiles] = solid ? new LandTile(x, y, solid) : new WaterTile(x, y, solid);
+            }
+        }
+
+        return new TileMap(widthInTiles, heightInTiles, tiles);
+    }
+
+    public static TileMap circleMap(int widthInTiles, int heightInTiles, int radius, int islandSize) {
+        int numOfTiles = widthInTiles * heightInTiles;
+        Tile[] tiles = new Tile[numOfTiles];
+
+        int centerX = widthInTiles / 2;
+        int centerY = heightInTiles / 2;
+
+        for (int x = 0; x < widthInTiles; x++) {
+            for (int y = 0; y < heightInTiles; y++) {
+                double distance = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
+
+                Tile t;
+                if(distance < islandSize) {
+                    t = new LandTile(x, y, true);
+                } else {
+                    t = new WaterTile(x, y, distance > radius);
+                }
+                tiles[x + y * widthInTiles] = t;
             }
         }
 

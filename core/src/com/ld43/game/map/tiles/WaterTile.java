@@ -4,7 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class WaterTile extends Tile {
 
-    private Texture tile = new Texture("tiles/water.png");
+    private Texture solidTexture = new Texture("tiles/darkWater.png");
+    private Texture emptyTexture = new Texture("tiles/water.png");
 
     public WaterTile(int x, int y, boolean solid) {
         super(x, y, solid);
@@ -12,6 +13,6 @@ public class WaterTile extends Tile {
 
     @Override
     public Texture getTexture() {
-        return tile;
+        return solid ? solidTexture : emptyTexture;
     }
 }

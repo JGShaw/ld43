@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class LandTile extends Tile {
 
-    Texture tile = new Texture("tiles/land.png");
+    Texture texture = new Texture("tiles/land.png");
 
     public LandTile(int x, int y, boolean solid) {
         super(x, y, solid);
@@ -12,6 +12,6 @@ public class LandTile extends Tile {
 
     @Override
     public Texture getTexture() {
-        return tile;
+        return texture;
     }
 }

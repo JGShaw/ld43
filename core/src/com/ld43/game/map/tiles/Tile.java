@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 public abstract class Tile {
 
     private int x, y;
-    private boolean solid;
+    protected boolean solid;
 
     public Tile(int x, int y, boolean solid) {
 

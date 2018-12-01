@@ -15,10 +15,10 @@ public class Ld43 extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
-		map = TileMap.borderMap(32, 32);
+		map = TileMap.circleMap(31, 31, 14, 2);
 		batch = new SpriteBatch();
 
-		camera = new OrthographicCamera(32*32, 32*32);
+		camera = new OrthographicCamera(31*32, 31*32);
 
 		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 		camera.update();
