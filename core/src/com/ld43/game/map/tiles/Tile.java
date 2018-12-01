@@ -1,6 +1,8 @@
 package com.ld43.game.map.tiles;
 
-public class Tile {
+import com.badlogic.gdx.graphics.Texture;
+
+public abstract class Tile {
 
     private int x, y;
     private boolean solid;
@@ -12,6 +14,8 @@ public class Tile {
         this.solid = solid;
 
     }
+
+    public abstract Texture getTexture();
 
     public Tile(int x, int y){
         this(x, y, false);

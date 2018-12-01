@@ -1,43 +1,17 @@
 package com.ld43.game.map.tiles;
 
-public class WaterTile {
+import com.badlogic.gdx.graphics.Texture;
 
-    private int x, y;
-    private boolean solid;
+public class WaterTile extends Tile {
+
+    private Texture tile = new Texture("tiles/water.png");
 
     public WaterTile(int x, int y, boolean solid) {
-
-        this.x = x;
-        this.y = y;
-        this.solid = solid;
-
+        super(x, y, solid);
     }
 
-    public WaterTile(int x, int y){
-        this(x, y, false);
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public boolean isSolid() {
-        return solid;
-    }
-
-    public void setSolid(boolean solid) {
-        this.solid = solid;
+    @Override
+    public Texture getTexture() {
+        return tile;
     }
 }
