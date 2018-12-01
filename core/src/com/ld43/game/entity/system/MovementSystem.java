@@ -5,6 +5,7 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.ld43.game.entity.component.PositionComponent;
 import com.ld43.game.entity.component.RouteComponent;
 import com.ld43.game.entity.component.VelocityComponent;
+import com.ld43.game.math.MathUtils;
 
 public class MovementSystem extends EntitySystem {
     private ImmutableArray<Entity> entities;
@@ -26,13 +27,10 @@ public class MovementSystem extends EntitySystem {
             VelocityComponent velocity = vm.get(entity);
             RouteComponent route = rm.get(entity);
 
-            int[] vector = route.getVector();
+            double[] vector = route.getVector(velocity.maxSpeed);
 
-            velocity.x = vector[0] == 0 ? 0 : Math.copySign(velocity.maxSpeed,vector[0]);
-            velocity.y = vector[1] == 0 ? 0 : Math.copySign(velocity.maxSpeed,vector[1]);
-
-            position.x += (velocity.x * deltaTime);
-            position.y += (velocity.y * deltaTime);
+            position.x += (vector[0] * deltaTime);
+            position.y += (vector[1] * deltaTime);
 
             route.updateWaypoint(position.x, position.y);
         }

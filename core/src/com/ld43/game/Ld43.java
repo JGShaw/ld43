@@ -17,7 +17,9 @@ import com.ld43.game.entity.component.VelocityComponent;
 import com.ld43.game.entity.system.MovementSystem;
 import com.ld43.game.map.TileMap;
 import com.ld43.game.map.tiles.Tile;
+import com.ld43.game.map.tiles.WaterTile;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -50,7 +52,15 @@ public class Ld43 extends ApplicationAdapter {
 		boat.add(new PositionComponent(16f, 16f));
 		boat.add(new VelocityComponent(32f, 32f, 32f));
 
-		List<Tile> tiles = Arrays.asList(map.getTiles());
+//		List<Tile> tiles = Arrays.asList(map.getTiles());
+		List<Tile> tiles = new ArrayList<Tile>();
+		tiles.add(new WaterTile(0,0,false));
+		tiles.add(new WaterTile(5,5, false));
+		tiles.add(new WaterTile(7,4, false));
+		tiles.add(new WaterTile(5,3, false));
+		tiles.add(new WaterTile(3,4, false));
+		tiles.add(new WaterTile(5,5, false));
+
 		boat.add(new RouteComponent(tiles));
 		engine.addEntity(boat);
 
