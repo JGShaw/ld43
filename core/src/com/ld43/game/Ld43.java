@@ -12,9 +12,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ld43.game.entity.component.PositionComponent;
 import com.ld43.game.entity.component.RenderableComponent;
+import com.ld43.game.entity.component.RouteComponent;
 import com.ld43.game.entity.component.VelocityComponent;
 import com.ld43.game.entity.system.MovementSystem;
 import com.ld43.game.map.TileMap;
+import com.ld43.game.map.tiles.Tile;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class Ld43 extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -41,8 +47,11 @@ public class Ld43 extends ApplicationAdapter {
 
 		boatTexture = new Texture("tiles/boat.png");
 		boat.add(new RenderableComponent(boatTexture));
-		boat.add(new PositionComponent(32f, 32f));
-		boat.add(new VelocityComponent(32f, 32f));
+		boat.add(new PositionComponent(16f, 16f));
+		boat.add(new VelocityComponent(32f, 32f, 32f));
+
+		List<Tile> tiles = Arrays.asList(map.getTiles());
+		boat.add(new RouteComponent(tiles));
 		engine.addEntity(boat);
 
 		engine.addSystem(ms);
