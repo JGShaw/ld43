@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Affine2;
 import com.ld43.game.entity.component.*;
 import com.ld43.game.entity.system.BoatVelocitySystem;
 import com.ld43.game.entity.system.MovementSystem;
@@ -101,8 +103,8 @@ public class Ld43 extends ApplicationAdapter {
 			RenderableComponent rc = entity.getComponent(RenderableComponent.class);
 			PositionComponent pc = entity.getComponent(PositionComponent.class);
 
-			batch.draw(rc.texture, pc.x - rc.width / 2, pc.y - rc.height / 2, rc.width, rc.height);
-
+			Affine2 rotation = new Affine2().translate(pc.x, pc.y).rotateRad(-rc.rotation).translate(-rc.width / 2, -rc.height / 2);
+			batch.draw(new TextureRegion(rc.texture), rc.width, rc.height, rotation);
 		}
 
 		batch.end();

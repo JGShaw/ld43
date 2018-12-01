@@ -9,29 +9,26 @@ import java.util.List;
 public class RouteComponent implements Component {
     public List<Tile> tiles;
     public int tileIndex = 0;
+    public boolean complete = false;
 
     public RouteComponent(List<Tile> tiles){
         this.tiles = tiles;
     }
 
-    public double[] getVector(float speed) {
-        if(tileIndex + 1 >= tiles.size()) { double[] a = {0, 0}; return a; }
-
+    public double getAngle() {
         Tile from = tiles.get(tileIndex);
         Tile to = tiles.get(tileIndex + 1);
 
-        double angle = MathUtils.angleBetweenPoints(from.getX(), from.getY(), to.getX(), to.getY());
-        return MathUtils.movementVectors(speed, angle);
+        return MathUtils.angleBetweenPoints(from.getX(), from.getY(), to.getX(), to.getY());
     }
 
     public void updateWaypoint(float x, float y) {
-        if(tileIndex + 1 >= tiles.size()) { return; }
-
         Tile tile = tiles.get(tileIndex + 1);
 
         double distance = Math.sqrt(Math.pow(tile.getX() - x, 2) + Math.pow(tile.getY() - y, 2));
         if(distance < 2f) {
             tileIndex += 1;
+            complete = tileIndex + 1 >= tiles.size();
         }
     }
 }
