@@ -1,10 +1,15 @@
 package com.ld43.game.map;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.ld43.game.map.tiles.Tile;
 
 import java.util.Random;
 
 public class TileMap {
+
+    Texture tileWater = new Texture("tiles/water.png");
+    Texture tileLand = new Texture("tiles/land.png");
 
     private int widthInTiles, heightInTiles;
     private Tile[] tiles;
@@ -14,6 +19,17 @@ public class TileMap {
         this.widthInTiles = widthInTiles;
         this.heightInTiles = heightInTiles;
         this.tiles = tiles;
+
+    }
+
+    public void render(Batch batch){
+
+        for (int y = 0; y < heightInTiles; y++) {
+            for (int x = 0; x < widthInTiles; x++) {
+                Texture img = tiles[x + y * widthInTiles].isSolid() ? tileLand : tileWater;
+                batch.draw(img, x * 32, y * 32, 32, 32);
+            }
+        }
 
     }
 
