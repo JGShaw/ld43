@@ -47,6 +47,9 @@ public class Ld43 extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
+
+        TextureRegistry.loadTextures();
+
 		map = TileMap.circleMap(31, 31, 14, 2);
 		batch = new SpriteBatch();
 
@@ -54,8 +57,6 @@ public class Ld43 extends ApplicationAdapter {
 
 		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 		camera.update();
-
-		TextureRegistry.loadTextures();
 
 		boatTexture = new Texture("tiles/boat.png");
 		boat.add(new RenderableComponent(boatTexture));

@@ -20,19 +20,19 @@ public class ProjectileBuilder {
         switch (projectileId) {
             case PROJECTILE_SMALL:
                 entity.add(new VelocityComponent(xVelComp * 200, yVelComp * 200, 0));
-                entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile-small"), 4, 4));
+                entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile--small"), 4, 4));
                 break;
             case PROJECTILE_MEDIUM:
                 entity.add(new VelocityComponent(xVelComp * 150, yVelComp * 150, 0));
-                entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile-medium"), 6, 6));
+                entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile--medium"), 6, 6));
                 break;
             case PROJECTILE_LARGE:
                 entity.add(new VelocityComponent(xVelComp * 100, yVelComp * 100, 0));
-                entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile-large"), 8, 8));
+                entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile--large"), 8, 8));
                 break;
             case PROJECTILE_HUGE:
                 entity.add(new VelocityComponent(xVelComp * 50, yVelComp * 50, 0));
-                entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile-huge"), 14, 14));
+                entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile--huge"), 14, 14));
                 break;
             default:
                 return null;
