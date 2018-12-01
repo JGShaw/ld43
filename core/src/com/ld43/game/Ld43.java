@@ -1,15 +1,31 @@
 package com.ld43.game;
 
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.ld43.game.entity.component.PositionComponent;
+import com.ld43.game.entity.component.RenderableComponent;
+import com.ld43.game.entity.component.VelocityComponent;
+import com.ld43.game.entity.system.MovementSystem;
 import com.ld43.game.map.TileMap;
 
 public class Ld43 extends ApplicationAdapter {
 	SpriteBatch batch;
 	TileMap map;
+
+	// Ashley ECS
+	private Engine engine = new Engine();
+	private MovementSystem ms = new MovementSystem();
+	private Family renderable = Family.all(RenderableComponent.class, PositionComponent.class).get();
+	private Entity boat = new Entity();
+	private Texture boatTexture;
 
 	private OrthographicCamera camera;
 	
@@ -23,6 +39,14 @@ public class Ld43 extends ApplicationAdapter {
 		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 		camera.update();
 
+		boatTexture = new Texture("tiles/boat.png");
+		boat.add(new RenderableComponent(boatTexture));
+		boat.add(new PositionComponent(32f, 32f));
+		boat.add(new VelocityComponent(32f, 32f));
+		engine.addEntity(boat);
+
+		engine.addSystem(ms);
+
 	}
 
 	@Override
@@ -30,11 +54,25 @@ public class Ld43 extends ApplicationAdapter {
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		camera.update();
-		batch.setProjectionMatrix(camera.combined);
 
+		camera.update();
+		engine.update(Gdx.graphics.getDeltaTime());
+
+
+		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		map.render(batch);
+
+		ImmutableArray<Entity> renderables = engine.getEntitiesFor(renderable);
+
+		for(Entity entity: renderables){
+			RenderableComponent rc = entity.getComponent(RenderableComponent.class);
+			PositionComponent pc = entity.getComponent(PositionComponent.class);
+
+			batch.draw(rc.texture, pc.x - rc.width / 2, pc.y - rc.height / 2, rc.width, rc.height);
+
+		}
+
 		batch.end();
 	}
 	
