@@ -20,14 +20,13 @@ public class RoutePlanner extends InputAdapter {
     }
 
     @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
         screenY = Gdx.graphics.getHeight() - screenY;
         int tileX = (int) Math.floor(screenX / Tile.getActualSize());
         int tileY = (int) Math.floor(screenY / Tile.getActualSize());
         Tile tile = new LandTile(tileX, tileY, true);
         waypoints.add(tile);
         tileMap.setTile(tileX, tileY, tile);
-
 
         return true;
     }

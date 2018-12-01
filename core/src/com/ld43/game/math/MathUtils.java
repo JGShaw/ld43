@@ -8,6 +8,11 @@ public class MathUtils {
     }
 
     public static double angleBetweenPoints(float fromX, float fromY, float toX, float toY) {
+        float xDiff = toX - fromX;
+        float yDiff = toY - fromY;
+        if(xDiff == 0 && yDiff == 0) { return 0; }
+
+
         if(toX >= fromX) {
             if(toY > fromY) { return Math.atan((toX - fromX) / (toY - fromY)); // Up left
             } else { return (- Math.atan((toY - fromY) / (toX - fromX)) + Math.PI / 2); } //Down right

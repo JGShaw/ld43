@@ -27,10 +27,9 @@ public class RouteComponent implements Component {
         Tile tile = tiles.get(tileIndex + 1);
 
         double distance = Math.sqrt(Math.pow(tile.getX() - x, 2) + Math.pow(tile.getY() - y, 2));
+
         if(distance < 2f) {
             tileIndex += 1;
-            System.out.println("Going " + tileIndex);
-            System.out.println("Going to" + tiles.get(tileIndex + 1).getTileX() + "," + tiles.get(tileIndex + 1).getTileY());
             complete = tileIndex + 1 >= tiles.size();
         }
     }
