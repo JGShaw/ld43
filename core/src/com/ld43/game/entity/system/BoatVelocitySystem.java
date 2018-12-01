@@ -33,6 +33,7 @@ public class BoatVelocitySystem extends EntitySystem {
             RouteComponent route = rm.get(entity);
             RenderableComponent render = renm.get(entity);
 
+            route.updateWaypoint(position.x, position.y);
             if(route.complete) {
                 velocity.x = 0;
                 velocity.y = 0;
@@ -42,7 +43,6 @@ public class BoatVelocitySystem extends EntitySystem {
                 velocity.x = (float) vector[0];
                 velocity.y = (float) vector[1];
                 render.rotation = (float) angle;
-                route.updateWaypoint(position.x, position.y);
             }
         }
     }
