@@ -12,9 +12,16 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ld43.game.entity.component.PositionComponent;
 import com.ld43.game.entity.component.RenderableComponent;
+import com.ld43.game.entity.component.RouteComponent;
 import com.ld43.game.entity.component.VelocityComponent;
+import com.ld43.game.entity.system.BoatVelocitySystem;
 import com.ld43.game.entity.system.MovementSystem;
 import com.ld43.game.map.TileMap;
+import com.ld43.game.map.tiles.Tile;
+import com.ld43.game.map.tiles.WaterTile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Ld43 extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -23,6 +30,7 @@ public class Ld43 extends ApplicationAdapter {
 	// Ashley ECS
 	private Engine engine = new Engine();
 	private MovementSystem ms = new MovementSystem();
+	private BoatVelocitySystem bvs = new BoatVelocitySystem();
 	private Family renderable = Family.all(RenderableComponent.class, PositionComponent.class).get();
 	private Entity boat = new Entity();
 	private Texture boatTexture;
@@ -41,11 +49,23 @@ public class Ld43 extends ApplicationAdapter {
 
 		boatTexture = new Texture("tiles/boat.png");
 		boat.add(new RenderableComponent(boatTexture));
-		boat.add(new PositionComponent(32f, 32f));
-		boat.add(new VelocityComponent(32f, 32f));
+		boat.add(new PositionComponent(16f, 16f));
+		boat.add(new VelocityComponent(32f, 32f, 32f));
+
+//		List<Tile> tiles = Arrays.asList(map.getTiles());
+		List<Tile> tiles = new ArrayList<Tile>();
+		tiles.add(new WaterTile(0,0,false));
+		tiles.add(new WaterTile(5,5, false));
+		tiles.add(new WaterTile(7,4, false));
+		tiles.add(new WaterTile(5,3, false));
+		tiles.add(new WaterTile(3,4, false));
+		tiles.add(new WaterTile(5,5, false));
+
+		boat.add(new RouteComponent(tiles));
 		engine.addEntity(boat);
 
 		engine.addSystem(ms);
+		engine.addSystem(bvs);
 
 	}
 
@@ -54,10 +74,8 @@ public class Ld43 extends ApplicationAdapter {
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
 		camera.update();
 		engine.update(Gdx.graphics.getDeltaTime());
-
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
