@@ -1,9 +1,15 @@
 package com.ld43.game.map;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.ld43.game.graphics.TextureRegistry;
+import com.ld43.game.map.beans.TileBean;
+import com.ld43.game.map.beans.TileMapBean;
 import com.ld43.game.map.tiles.LandTile;
 import com.ld43.game.map.tiles.*;
+
+import static com.badlogic.gdx.net.HttpRequestBuilder.json;
 
 public class TileMap {
 
@@ -24,7 +30,7 @@ public class TileMap {
         for (int y = 0; y < heightInTiles; y++) {
             for (int x = 0; x < widthInTiles; x++) {
                 Tile tile = tiles[x + y * widthInTiles];
-                Texture img = tile.getTexture();
+                TextureRegion img = tile.getTexture();
                 batch.draw(img, tile.getX() - Tile.TILE_WIDTH / 2, tile.getY() - Tile.TILE_WIDTH / 2, Tile.TILE_WIDTH, Tile.TILE_WIDTH);
             }
         }
@@ -33,6 +39,14 @@ public class TileMap {
 
     public Tile[] getTiles() {
         return tiles;
+    }
+
+    private Tile getTile(int x, int y) {
+        if(x < 0 || x >= widthInTiles || y < 0 || y >= heightInTiles) {
+            return null;
+        }
+
+        return tiles[x + y * widthInTiles];
     }
 
     public String toString() {
@@ -87,4 +101,30 @@ public class TileMap {
 
         return new TileMap(widthInTiles, heightInTiles, tiles);
     }
+
+    public static TileMap fromFile(String fileName){
+
+        TileMapBean map = json.fromJson(TileMapBean.class,
+                Gdx.files.internal(fileName));
+
+        int widthInTiles = map.getTileswide();
+        int heightInTiles = map.getTileshigh();
+
+        Tile[] tiles = new Tile[widthInTiles * heightInTiles];
+
+        for(TileBean tile: map.getLayers().get(0).getTiles()) {
+
+            int x = tile.getX();
+            int y = heightInTiles - tile.getY() - 1;
+
+            WaterTile newTile = new WaterTile(x, y, tile.getTile() > 0);
+            newTile.setTexture(TextureRegistry.getTexture("tile-water--" + tile.getTile()));
+            tiles[x + y * widthInTiles] = newTile;
+
+        }
+
+        return new TileMap(widthInTiles, heightInTiles, tiles);
+
+    }
+
 }

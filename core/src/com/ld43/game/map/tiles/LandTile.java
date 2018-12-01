@@ -1,17 +1,19 @@
 package com.ld43.game.map.tiles;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.ld43.game.graphics.TextureRegistry;
 
 public class LandTile extends Tile {
 
-    Texture texture = new Texture("tiles/land.png");
+    TextureRegion texture = TextureRegistry.getTexture("tile-land");
 
     public LandTile(int x, int y, boolean solid) {
         super(x, y, solid);
     }
 
     @Override
-    public Texture getTexture() {
+    public TextureRegion getTexture() {
         return texture;
     }
+
 }

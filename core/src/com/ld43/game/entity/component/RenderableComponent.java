@@ -1,23 +1,23 @@
 package com.ld43.game.entity.component;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class RenderableComponent implements Component {
 
-    public Texture texture;
+    public TextureRegion texture;
     public int width;
     public int height;
     public float rotation;
 
-    public RenderableComponent(Texture texture, int width, int height){
+    public RenderableComponent(TextureRegion texture, int width, int height){
         this.texture = texture;
         this.width = width;
         this.height = height;
         this.rotation = (float) Math.PI / 2;
     }
 
-    public RenderableComponent(Texture texture){
+    public RenderableComponent(TextureRegion texture){
         this(texture, 32, 32);
 
     }

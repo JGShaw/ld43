@@ -8,7 +8,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Affine2;
@@ -36,10 +35,6 @@ public class Ld43 extends ApplicationAdapter {
 	private Family renderable = Family.all(RenderableComponent.class, PositionComponent.class).get();
 
 	private Entity boat = new Entity();
-	private Texture boatTexture;
-
-    private Entity projectile = new Entity();
-    private Texture projectileTexture;
 
     private Entity tower = new Entity();
 
@@ -49,8 +44,8 @@ public class Ld43 extends ApplicationAdapter {
 	public void create () {
 
         TextureRegistry.loadTextures();
+		map =  TileMap.fromFile("tiles/WaterTileMap.json");
 
-		map = TileMap.circleMap(31, 31, 14, 2);
 		batch = new SpriteBatch();
 
 		camera = new OrthographicCamera(31*32, 31*32);
@@ -58,8 +53,7 @@ public class Ld43 extends ApplicationAdapter {
 		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 		camera.update();
 
-		boatTexture = new Texture("tiles/boat.png");
-		boat.add(new RenderableComponent(boatTexture));
+		boat.add(new RenderableComponent(TextureRegistry.getTexture("boat")));
 		boat.add(new PositionComponent(16f, 16f));
 		boat.add(new VelocityComponent(32f, 32f, 32f));
 
