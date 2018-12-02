@@ -101,6 +101,20 @@ public class Ld43 extends ApplicationAdapter {
 			batch.draw(new TextureRegion(rc.texture), rc.width, rc.height, rotation);
 		}
 
+		ImmutableArray<Entity> routes = engine.getEntitiesFor(Family.all(RouteComponent.class).get());
+		for(Entity entity: routes) {
+			RouteComponent routeComponent = entity.getComponent(RouteComponent.class);
+			float[] polyline = routeComponent.polylinePoints();
+
+			if (polyline.length < 4) { continue; }
+
+			shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+			shapeRenderer.setColor(1, 1, 1, 0.5f); // Red line
+			shapeRenderer.polyline(polyline);
+			shapeRenderer.end();
+		}
+
+
 		ImmutableArray<Entity> hasHealthBarEntities = engine.getEntitiesFor(hasHealthBar);
 
 		for (Entity entity: hasHealthBarEntities) {
@@ -122,6 +136,7 @@ public class Ld43 extends ApplicationAdapter {
 			shapeRenderer.setColor(Color.GREEN);
 			shapeRenderer.rect(healthBarPosX, healthBarPosY, healthWidth, healthBarHeight);
 			shapeRenderer.end();
+
 
 		}
 

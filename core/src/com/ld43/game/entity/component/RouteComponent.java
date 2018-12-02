@@ -36,4 +36,14 @@ public class RouteComponent implements Component {
         route.add(tile);
         complete = false;
     }
+
+    public float[] polylinePoints() {
+        float[] points = new float[route.size() * 2];
+        for(int i = 0; i < route.size() * 2; i+=2) {
+            Tile t = route.get(i / 2);
+            points[i] = t.getX();
+            points[i + 1] = t.getY();
+        }
+        return points;
+    }
 }

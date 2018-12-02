@@ -35,7 +35,7 @@ public class InputHandler extends InputAdapter {
         return false;
     }
 
-    public static void resetTileTouchUp(){
+    public static void resetTileTouchDown(){
         tileTouchUpX = -1;
         tileTouchUpY = -1;
     }

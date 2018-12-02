@@ -8,8 +8,6 @@ import com.ld43.game.entity.component.RouteComponent;
 import com.ld43.game.entity.component.VelocityComponent;
 import com.ld43.game.input.InputHandler;
 import com.ld43.game.map.TileMap;
-import com.ld43.game.map.tiles.LandTile;
-import com.ld43.game.map.tiles.Tile;
 import com.ld43.game.math.MathUtils;
 
 public class BoatVelocitySystem extends EntitySystem {
@@ -45,10 +43,8 @@ public class BoatVelocitySystem extends EntitySystem {
             int tileY = InputHandler.tileTouchUpY;
 
             if(tileX != -1 && tileY != -1 && InputHandler.boatNumber == i) {
-                Tile tile = new LandTile(tileX, tileY, true);
-                tileMap.setTile(tileX, tileY, tile);
-                route.addToPath(tile);
-                InputHandler.resetTileTouchUp();
+                route.addToPath(tileMap.getTile(tileX, tileY));
+                InputHandler.resetTileTouchDown();
             }
 
             route.updateWaypoint(position.x, position.y);
