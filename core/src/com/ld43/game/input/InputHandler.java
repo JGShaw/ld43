@@ -6,12 +6,12 @@ import com.ld43.game.map.tiles.Tile;
 
 import java.util.List;
 
-public class RoutePlanner extends InputAdapter {
+public class InputHandler extends InputAdapter {
     public static int tileTouchUpX = -1;
     public static int tileTouchUpY = -1;
 
     public static int scrolled;
-    public RoutePlanner() {
+    public InputHandler() {
     }
 
     @Override

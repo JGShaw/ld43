@@ -20,7 +20,7 @@ import com.ld43.game.entity.system.HealthUpdateSystem;
 import com.ld43.game.entity.system.MovementSystem;
 import com.ld43.game.entity.system.ProjectileLauncherSystem;
 import com.ld43.game.graphics.TextureRegistry;
-import com.ld43.game.input.RoutePlanner;
+import com.ld43.game.input.InputHandler;
 import com.ld43.game.map.TileMap;
 
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public class Ld43 extends ApplicationAdapter {
 		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 		camera.update();
 
-		RoutePlanner inputProcessor = new RoutePlanner();
+		InputHandler inputProcessor = new InputHandler();
 		Gdx.input.setInputProcessor(inputProcessor);
 
 		engine.addEntity(Boat.placeBoat(16, 16));
