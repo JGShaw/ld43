@@ -2,9 +2,7 @@ package com.ld43.game.entity.projectiles;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
-import com.ld43.game.entity.component.PositionComponent;
-import com.ld43.game.entity.component.RenderableComponent;
-import com.ld43.game.entity.component.VelocityComponent;
+import com.ld43.game.entity.component.*;
 import com.ld43.game.graphics.TextureRegistry;
 
 public class ProjectileBuilder {
@@ -14,24 +12,32 @@ public class ProjectileBuilder {
         Entity entity = new Entity();
         entity.add(new PositionComponent(xPos, yPos));
 
-        float xVelComp = MathUtils.cos(angle);
-        float yVelComp = MathUtils.sin(angle);
+        float xVelComp = MathUtils.sin(angle);
+        float yVelComp = MathUtils.cos(angle);
 
         switch (projectileId) {
             case PROJECTILE_SMALL:
+                entity.add(new ProjectileComponent(10));
                 entity.add(new VelocityComponent(xVelComp * 200, yVelComp * 200, 0));
+                entity.add(new CollisionComponent(2));
                 entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile--small"), 4, 4));
                 break;
             case PROJECTILE_MEDIUM:
+                entity.add(new ProjectileComponent(15));
                 entity.add(new VelocityComponent(xVelComp * 150, yVelComp * 150, 0));
+                entity.add(new CollisionComponent(3));
                 entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile--medium"), 6, 6));
                 break;
             case PROJECTILE_LARGE:
+                entity.add(new ProjectileComponent(30));
                 entity.add(new VelocityComponent(xVelComp * 100, yVelComp * 100, 0));
+                entity.add(new CollisionComponent(4));
                 entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile--large"), 8, 8));
                 break;
             case PROJECTILE_HUGE:
+                entity.add(new ProjectileComponent(50));
                 entity.add(new VelocityComponent(xVelComp * 50, yVelComp * 50, 0));
+                entity.add(new CollisionComponent(7));
                 entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile--huge"), 14, 14));
                 break;
             default:

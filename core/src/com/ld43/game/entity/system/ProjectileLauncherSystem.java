@@ -8,8 +8,6 @@ import com.ld43.game.entity.component.ProjectileLauncherComponent;
 import com.ld43.game.entity.projectiles.ProjectileBuilder;
 import com.ld43.game.entity.projectiles.ProjectileType;
 
-import static com.ld43.game.entity.projectiles.ProjectileType.PROJECTILE_SMALL;
-
 public class ProjectileLauncherSystem extends EntitySystem {
     private ImmutableArray<Entity> entities;
 

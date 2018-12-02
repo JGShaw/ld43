@@ -14,10 +14,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Affine2;
 import com.ld43.game.entity.component.*;
-import com.ld43.game.entity.system.BoatVelocitySystem;
-import com.ld43.game.entity.system.HealthUpdateSystem;
-import com.ld43.game.entity.system.MovementSystem;
-import com.ld43.game.entity.system.ProjectileLauncherSystem;
+import com.ld43.game.entity.system.*;
 import com.ld43.game.graphics.TextureRegistry;
 import com.ld43.game.input.RoutePlanner;
 import com.ld43.game.map.TileMap;
@@ -38,6 +35,7 @@ public class Ld43 extends ApplicationAdapter {
 	private MovementSystem ms = new MovementSystem();
 	private BoatVelocitySystem bvs;
 	private ProjectileLauncherSystem pls = new ProjectileLauncherSystem();
+	private ProjectileCollisionSystem pcs = new ProjectileCollisionSystem();
 	private HealthUpdateSystem hus = new HealthUpdateSystem();
 	private Family renderable = Family.all(RenderableComponent.class, PositionComponent.class).get();
 	private Family hasHealthBar = Family.all(HealthComponent.class, RenderableComponent.class, PositionComponent.class).get();
@@ -64,6 +62,7 @@ public class Ld43 extends ApplicationAdapter {
 		camera.update();
 
 		boat.add(new RenderableComponent(TextureRegistry.getTexture("boat")));
+		boat.add(new CollisionComponent(12f));
 		boat.add(new PositionComponent(16f, 16f));
 		boat.add(new VelocityComponent(32f, 32f, 32f));
 
@@ -88,6 +87,9 @@ public class Ld43 extends ApplicationAdapter {
 		engine.addSystem(new BoatVelocitySystem(map));
 		engine.addSystem(pls);
 		engine.addSystem(hus);
+		engine.addSystem(pcs);
+
+
 
 	}
 

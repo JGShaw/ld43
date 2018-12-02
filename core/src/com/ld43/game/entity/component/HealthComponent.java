@@ -25,9 +25,6 @@ public class HealthComponent implements Component {
                 healthBetween = healthCurrent;
             }
         }
-
-        System.out.println("Health: " + healthCurrent + "  , " + healthBetween);
-
     }
 
     public void takeDamage(float damage){
