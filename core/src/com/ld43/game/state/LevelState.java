@@ -10,71 +10,56 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Affine2;
-import com.ld43.game.entity.Boat;
 import com.ld43.game.entity.component.*;
 import com.ld43.game.entity.system.*;
-import com.ld43.game.entity.tower.Tower;
 import com.ld43.game.input.InputHandler;
 import com.ld43.game.map.TileMap;
 
-import static com.ld43.game.entity.component.TowerTargetDeciderComponent.TowerBehaviour.RANDOM_TARGET;
-
-public class LevelState extends State {
+public abstract class LevelState extends State {
 
     public static final int NUM_OF_TILES = 31;
 
-    SpriteBatch batch;
-    TileMap map;
+    private OrthographicCamera camera;
+    private ShapeRenderer shapeRenderer;
+    private ShapeRenderer routeRenderer;
+    private SpriteBatch batch;
+    private TileMap map;
 
     // Ashley ECS
     Engine engine = new Engine();
-    MovementSystem ms = new MovementSystem();
-    BoatVelocitySystem bvs;
-    ProjectileLauncherSystem pls = new ProjectileLauncherSystem();
-    ProjectileCollisionSystem pcs = new ProjectileCollisionSystem();
-    HealthUpdateSystem hus = new HealthUpdateSystem();
-    BoatProjectileLauncherSystem bpls = new BoatProjectileLauncherSystem();
-    FocusedSystem fs = new FocusedSystem();
-    private Family renderable = Family.all(RenderableComponent.class, PositionComponent.class).exclude(UnderwaterComponent.class).get();
-    private Family renderableUnderwater = Family.all(RenderableComponent.class, PositionComponent.class, UnderwaterComponent.class).get();
-    private Family hasHealthBar = Family.all(HealthComponent.class, RenderableComponent.class, PositionComponent.class).get();
-    private Family canBeFocused = Family.all(FocusableComponent.class ,RenderableComponent.class, PositionComponent.class).get();
 
-    private Entity tower = new Entity();
+    Family renderable = Family.all(RenderableComponent.class, PositionComponent.class).exclude(UnderwaterComponent.class).get();
+    Family renderableUnderwater = Family.all(RenderableComponent.class, PositionComponent.class, UnderwaterComponent.class).get();
+    Family hasHealthBar = Family.all(HealthComponent.class, RenderableComponent.class, PositionComponent.class).get();
+    Family canBeFocused = Family.all(FocusableComponent.class, RenderableComponent.class, PositionComponent.class).get();
 
-    private OrthographicCamera camera;
+    public LevelState(String tileMapFileName){
 
-    private ShapeRenderer shapeRenderer;
-    private ShapeRenderer routeRenderer;
+        map = TileMap.fromFile(tileMapFileName);
+
+    }
 
     @Override
     public void create() {
-
-        map =  TileMap.fromFile("tiles/tileMap.json");
 
         batch = new SpriteBatch(2000);
         shapeRenderer = new ShapeRenderer();
         routeRenderer = new ShapeRenderer();
 
-        camera = new OrthographicCamera(31*32, 31*32);
-
+        camera = new OrthographicCamera(31 * 32, 31 * 32);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
 
         InputHandler inputProcessor = new InputHandler();
         Gdx.input.setInputProcessor(inputProcessor);
 
-        engine.addEntity(Boat.placeBoat(16, 16));
-        engine.addEntity(Boat.placeBoat(700, 700));
-        engine.addEntity(Tower.createTower(496, 496, 1000, RANDOM_TARGET));
-
-        engine.addSystem(ms);
+        engine.addSystem(new MovementSystem());
         engine.addSystem(new BoatVelocitySystem(map));
-        engine.addSystem(pls);
-        engine.addSystem(hus);
-        engine.addSystem(pcs);
-        engine.addSystem(bpls);
-        engine.addSystem(fs);
+        engine.addSystem(new ProjectileLauncherSystem());
+        engine.addSystem(new HealthUpdateSystem());
+        engine.addSystem(new ProjectileCollisionSystem());
+        engine.addSystem(new BoatProjectileLauncherSystem());
+        engine.addSystem(new FocusedSystem());
 
     }
 
@@ -113,7 +98,7 @@ public class LevelState extends State {
 
     private void renderHealthBars() {
         ImmutableArray<Entity> hasHealthBarEntities = engine.getEntitiesFor(hasHealthBar);
-        for (Entity entity: hasHealthBarEntities) {
+        for (Entity entity : hasHealthBarEntities) {
             RenderableComponent rc = entity.getComponent(RenderableComponent.class);
             PositionComponent pc = entity.getComponent(PositionComponent.class);
             HealthComponent hc = entity.getComponent(HealthComponent.class);
@@ -137,10 +122,10 @@ public class LevelState extends State {
 
     private void renderFocused() {
         ImmutableArray<Entity> entities = engine.getEntitiesFor(canBeFocused);
-        for(Entity entity : entities) {
+        for (Entity entity : entities) {
             FocusableComponent fc = entity.getComponent(FocusableComponent.class);
 
-            if(fc.focused) {
+            if (fc.focused) {
                 RenderableComponent rc = entity.getComponent(RenderableComponent.class);
                 PositionComponent pc = entity.getComponent(PositionComponent.class);
 
@@ -155,11 +140,13 @@ public class LevelState extends State {
 
     private void renderRoutes() {
         ImmutableArray<Entity> routes = engine.getEntitiesFor(Family.all(RouteComponent.class, FocusableComponent.class).get());
-        for(Entity entity: routes) {
+        for (Entity entity : routes) {
             RouteComponent rc = entity.getComponent(RouteComponent.class);
             FocusableComponent fc = entity.getComponent(FocusableComponent.class);
 
-            if(!fc.focused) { continue; }
+            if (!fc.focused) {
+                continue;
+            }
 
             routeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
             rc.renderRoute(routeRenderer);

@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.ld43.game.graphics.TextureRegistry;
 import com.ld43.game.input.InputHandler;
-import com.ld43.game.state.LevelState;
+import com.ld43.game.state.LevelOne;
 import com.ld43.game.state.StateManager;
 
 public class Ld43 extends ApplicationAdapter {
@@ -17,7 +17,7 @@ public class Ld43 extends ApplicationAdapter {
         TextureRegistry.loadTextures();
 
         stateManager = new StateManager();
-        stateManager.push(new LevelState());
+        stateManager.push(new LevelOne());
 
 		InputHandler inputProcessor = new InputHandler();
 		Gdx.input.setInputProcessor(inputProcessor);
