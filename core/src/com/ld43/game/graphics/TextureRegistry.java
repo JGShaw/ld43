@@ -69,6 +69,8 @@ public class TextureRegistry {
 
         registerTexture("boat-0", "entities/boat/boat-0.png");
         registerTexture("boat-0--sunk", "entities/boat/boat-0--sunk.png");
+        registerTexture("boat-1", "entities/boat/boat-1.png");
+        registerTexture("boat-1--sunk", "entities/boat/boat-1--sunk.png");
 
         registerTexture("tower", "entities/tower/tower.png");
         registerTexture("gun", "entities/tower/gun.png");
