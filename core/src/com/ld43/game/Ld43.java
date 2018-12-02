@@ -104,16 +104,8 @@ public class Ld43 extends ApplicationAdapter {
 		ImmutableArray<Entity> routes = engine.getEntitiesFor(Family.all(RouteComponent.class).get());
 		for(Entity entity: routes) {
 			RouteComponent routeComponent = entity.getComponent(RouteComponent.class);
-			float[] polyline = routeComponent.polylinePoints();
-
-			if (polyline.length < 4) { continue; }
-
-			shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-			shapeRenderer.setColor(1, 1, 1, 0.5f); // Red line
-			shapeRenderer.polyline(polyline);
-			shapeRenderer.end();
+			routeComponent.renderRoute(shapeRenderer);
 		}
-
 
 		ImmutableArray<Entity> hasHealthBarEntities = engine.getEntitiesFor(hasHealthBar);
 

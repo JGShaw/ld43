@@ -1,6 +1,7 @@
 package com.ld43.game.entity.component;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.ld43.game.map.tiles.Tile;
 import com.ld43.game.math.MathUtils;
 
@@ -45,5 +46,16 @@ public class RouteComponent implements Component {
             points[i + 1] = t.getY();
         }
         return points;
+    }
+
+    public void renderRoute(ShapeRenderer renderer) {
+        float[] polyline = polylinePoints();
+
+        if (polyline.length < 4) { return; }
+
+        renderer.begin(ShapeRenderer.ShapeType.Line);
+        renderer.setColor(1, 1, 1, 0.5f);
+        renderer.polyline(polyline);
+        renderer.end();
     }
 }
