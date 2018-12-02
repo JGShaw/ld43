@@ -11,6 +11,8 @@ import java.util.List;
 
 public class RoutePlanner extends InputAdapter {
 
+    public static int scrolled;
+
     TileMap tileMap;
     private List<Tile> waypoints;
 
@@ -31,4 +33,15 @@ public class RoutePlanner extends InputAdapter {
 
         return true;
     }
+
+
+    @Override
+    public boolean scrolled (int amount) {
+
+        scrolled = amount;
+
+        return false;
+    }
+
+
 }

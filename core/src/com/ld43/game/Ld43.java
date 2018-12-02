@@ -6,13 +6,16 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Affine2;
 import com.ld43.game.entity.component.*;
 import com.ld43.game.entity.system.BoatVelocitySystem;
+import com.ld43.game.entity.system.HealthUpdateSystem;
 import com.ld43.game.entity.system.MovementSystem;
 import com.ld43.game.entity.system.ProjectileLauncherSystem;
 import com.ld43.game.graphics.TextureRegistry;
@@ -35,13 +38,17 @@ public class Ld43 extends ApplicationAdapter {
 	private MovementSystem ms = new MovementSystem();
 	private BoatVelocitySystem bvs = new BoatVelocitySystem();
 	private ProjectileLauncherSystem pls = new ProjectileLauncherSystem();
+	private HealthUpdateSystem hus = new HealthUpdateSystem();
 	private Family renderable = Family.all(RenderableComponent.class, PositionComponent.class).get();
+	private Family hasHealthBar = Family.all(HealthComponent.class, RenderableComponent.class, PositionComponent.class).get();
 
 	private Entity boat = new Entity();
 
     private Entity tower = new Entity();
 
     private OrthographicCamera camera;
+
+    private ShapeRenderer shapeRenderer;
 	
 	@Override
 	public void create () {
@@ -49,7 +56,7 @@ public class Ld43 extends ApplicationAdapter {
 		map =  TileMap.fromFile("tiles/WaterTileMap.json");
 
 		batch = new SpriteBatch();
-
+		shapeRenderer = new ShapeRenderer();
 
 		camera = new OrthographicCamera(31*32, 31*32);
 
@@ -68,16 +75,19 @@ public class Ld43 extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(inputProcessor);
 
 		boat.add(new RouteComponent(waypoints));
+		boat.add(new HealthComponent(100, 100));
 		engine.addEntity(boat);
 
 		tower.add(new RenderableComponent(TextureRegistry.getTexture("projectile"), 64, 64));
 		tower.add(new PositionComponent(496f, 496f));
 		tower.add(new ProjectileLauncherComponent());
+		tower.add(new HealthComponent(1000, 1000));
 		engine.addEntity(tower);
 
 		engine.addSystem(ms);
 		engine.addSystem(bvs);
 		engine.addSystem(pls);
+		engine.addSystem(hus);
 
 	}
 
@@ -101,6 +111,30 @@ public class Ld43 extends ApplicationAdapter {
 
 			Affine2 rotation = new Affine2().translate(pc.x, pc.y).rotateRad(-rc.rotation).translate(-rc.width / 2, -rc.height / 2);
 			batch.draw(new TextureRegion(rc.texture), rc.width, rc.height, rotation);
+		}
+
+		ImmutableArray<Entity> hasHealthBarEntities = engine.getEntitiesFor(hasHealthBar);
+
+		for (Entity entity: hasHealthBarEntities) {
+
+			RenderableComponent rc = entity.getComponent(RenderableComponent.class);
+			PositionComponent pc = entity.getComponent(PositionComponent.class);
+			HealthComponent hc = entity.getComponent(HealthComponent.class);
+
+			float healthBarWidth = rc.width;
+			float healthBarHeight = Math.max(5, rc.height / 8);
+			float healthWidth = healthBarWidth * hc.getPercentageHealth();
+			float healthBarPosX = pc.x - rc.width / 2;
+			float healthBarPosY = pc.y + rc.height / 2 + 3;
+
+			shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+			shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+			shapeRenderer.setColor(Color.RED);
+			shapeRenderer.rect(healthBarPosX, healthBarPosY, healthBarWidth, healthBarHeight);
+			shapeRenderer.setColor(Color.GREEN);
+			shapeRenderer.rect(healthBarPosX, healthBarPosY, healthWidth, healthBarHeight);
+			shapeRenderer.end();
+
 		}
 
 		batch.end();
