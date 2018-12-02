@@ -44,7 +44,7 @@ public class BoatVelocitySystem extends EntitySystem {
             int tileX = InputHandler.tileTouchUpX;
             int tileY = InputHandler.tileTouchUpY;
 
-            if(tileX != -1 && tileY != -1) {
+            if(tileX != -1 && tileY != -1 && InputHandler.boatNumber == i) {
                 Tile tile = new LandTile(tileX, tileY, true);
                 tileMap.setTile(tileX, tileY, tile);
                 route.addToPath(tile);
