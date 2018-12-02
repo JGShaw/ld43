@@ -3,12 +3,17 @@ package com.ld43.game.entity.system;
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.ld43.game.entity.component.HealthComponent;
+import com.ld43.game.entity.component.PositionComponent;
+import com.ld43.game.entity.component.RenderableComponent;
+import com.ld43.game.graphics.TextureRegistry;
 import com.ld43.game.input.InputHandler;
 
 public class HealthUpdateSystem extends EntitySystem {
     private ImmutableArray<Entity> entities;
 
     private ComponentMapper<HealthComponent> hm = ComponentMapper.getFor(HealthComponent.class);
+    private ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
+    private ComponentMapper<RenderableComponent> rm = ComponentMapper.getFor(RenderableComponent.class);
 
     public HealthUpdateSystem() {}
 
@@ -26,6 +31,23 @@ public class HealthUpdateSystem extends EntitySystem {
             }
 
             health.update(deltaTime);
+
+            if(health.isDead()) {
+
+                if(health.deathTextureName != null) {
+
+                    Entity dead = new Entity();
+                    dead.add(pm.get(entity));
+                    RenderableComponent rc = rm.get(entity);
+                    rc.texture = TextureRegistry.getTexture(health.deathTextureName);
+                    dead.add(rc);
+                    getEngine().addEntity(dead);
+
+                }
+
+                getEngine().removeEntity(entity);
+
+            }
 
         }
 

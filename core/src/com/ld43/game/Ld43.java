@@ -50,7 +50,7 @@ public class Ld43 extends ApplicationAdapter {
 	@Override
 	public void create () {
         TextureRegistry.loadTextures();
-		map =  TileMap.fromFile("tiles/WaterTileMap.json");
+		map =  TileMap.fromFile("tiles/tileMap.json");
 
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
@@ -81,7 +81,7 @@ public class Ld43 extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
+		Gdx.gl.glClearColor(1, 0, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		camera.update();

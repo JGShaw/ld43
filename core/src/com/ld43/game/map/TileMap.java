@@ -119,9 +119,12 @@ public class TileMap {
             int y = heightInTiles - tile.getY() - 1;
 
             WaterTile newTile = new WaterTile(x, y, tile.getTile() > 0);
-            newTile.setTexture(TextureRegistry.getTexture("tile-water--" + tile.getTile()));
+            if(tile.getTile() <= 13){
+                newTile.setTexture(TextureRegistry.getTexture("tile-water--" + tile.getTile()));
+            }else {
+                newTile.setTexture(TextureRegistry.getTexture("tile-land--" + (tile.getTile() - 18)));
+            }
             tiles[x + y * widthInTiles] = newTile;
-
         }
 
         return new TileMap(widthInTiles, heightInTiles, tiles);

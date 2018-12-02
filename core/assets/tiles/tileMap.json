@@ -1,6 +1,6 @@
 {
     "tileswide": 31,
-    "tileheight": 16,
+    "tileheight": 32,
     "tileshigh": 31,
     "layers": [
         {
@@ -3595,7 +3595,7 @@
                     "y": 14,
                     "flipX": false,
                     "index": 448,
-                    "tile": 0,
+                    "tile": 18,
                     "x": 14
                 },
                 {
@@ -3603,7 +3603,7 @@
                     "y": 14,
                     "flipX": false,
                     "index": 449,
-                    "tile": 0,
+                    "tile": 19,
                     "x": 15
                 },
                 {
@@ -3611,7 +3611,7 @@
                     "y": 14,
                     "flipX": false,
                     "index": 450,
-                    "tile": 0,
+                    "tile": 20,
                     "x": 16
                 },
                 {
@@ -3843,7 +3843,7 @@
                     "y": 15,
                     "flipX": false,
                     "index": 479,
-                    "tile": 0,
+                    "tile": 21,
                     "x": 14
                 },
                 {
@@ -3851,7 +3851,7 @@
                     "y": 15,
                     "flipX": false,
                     "index": 480,
-                    "tile": 0,
+                    "tile": 22,
                     "x": 15
                 },
                 {
@@ -3859,7 +3859,7 @@
                     "y": 15,
                     "flipX": false,
                     "index": 481,
-                    "tile": 0,
+                    "tile": 23,
                     "x": 16
                 },
                 {
@@ -4091,7 +4091,7 @@
                     "y": 16,
                     "flipX": false,
                     "index": 510,
-                    "tile": 0,
+                    "tile": 24,
                     "x": 14
                 },
                 {
@@ -4099,7 +4099,7 @@
                     "y": 16,
                     "flipX": false,
                     "index": 511,
-                    "tile": 0,
+                    "tile": 25,
                     "x": 15
                 },
                 {
@@ -4107,7 +4107,7 @@
                     "y": 16,
                     "flipX": false,
                     "index": 512,
-                    "tile": 0,
+                    "tile": 26,
                     "x": 16
                 },
                 {
@@ -7698,5 +7698,5 @@
             "number": 0
         }
     ],
-    "tilewidth": 16
+    "tilewidth": 32
 }
