@@ -3,6 +3,7 @@ package com.ld43.game.map.tiles;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.Gdx;
 import com.ld43.game.Ld43;
+import com.ld43.game.state.LevelState;
 
 public abstract class Tile {
 
@@ -45,7 +46,7 @@ public abstract class Tile {
     }
 
     public static float getActualSize() {
-        return Gdx.graphics.getHeight() /(float) Ld43.NUM_OF_TILES;
+        return Gdx.graphics.getHeight() /(float) LevelState.NUM_OF_TILES;
     }
 
     public abstract void setTexture(TextureRegion texture);
