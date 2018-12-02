@@ -46,7 +46,8 @@ public class Ld43 extends ApplicationAdapter {
     private OrthographicCamera camera;
 
     private ShapeRenderer shapeRenderer;
-	
+	private ShapeRenderer routeRenderer;
+
 	@Override
 	public void create () {
         TextureRegistry.loadTextures();
@@ -54,6 +55,7 @@ public class Ld43 extends ApplicationAdapter {
 
 		batch = new SpriteBatch(2000);
 		shapeRenderer = new ShapeRenderer();
+		routeRenderer = new ShapeRenderer();
 
 		camera = new OrthographicCamera(31*32, 31*32);
 
@@ -88,9 +90,14 @@ public class Ld43 extends ApplicationAdapter {
 		engine.update(Gdx.graphics.getDeltaTime());
 
 		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
 
+		batch.begin();
 		renderEntities(renderableUnderwater);
+		batch.end();
+
+		renderRoutes();
+
+		batch.begin();
 		map.render(batch);
 		renderEntities(renderable);
 		batch.end();
@@ -100,9 +107,7 @@ public class Ld43 extends ApplicationAdapter {
 
 	private void renderHealthBars() {
 		ImmutableArray<Entity> hasHealthBarEntities = engine.getEntitiesFor(hasHealthBar);
-
 		for (Entity entity: hasHealthBarEntities) {
-
 			RenderableComponent rc = entity.getComponent(RenderableComponent.class);
 			PositionComponent pc = entity.getComponent(PositionComponent.class);
 			HealthComponent hc = entity.getComponent(HealthComponent.class);
@@ -120,7 +125,16 @@ public class Ld43 extends ApplicationAdapter {
 			shapeRenderer.setColor(Color.GREEN);
 			shapeRenderer.rect(healthBarPosX, healthBarPosY, healthWidth, healthBarHeight);
 			shapeRenderer.end();
+		}
 
+	}
+
+	private void renderRoutes() {
+		ImmutableArray<Entity> routes = engine.getEntitiesFor(Family.all(RouteComponent.class).get());
+		for(Entity entity: routes) {
+			RouteComponent routeComponent = entity.getComponent(RouteComponent.class);
+			routeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+			routeComponent.renderRoute(routeRenderer);
 		}
 	}
 
