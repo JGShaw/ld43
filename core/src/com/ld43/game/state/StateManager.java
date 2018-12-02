@@ -24,8 +24,8 @@ public class StateManager{
 
     }
 
-    public void push(LevelState levelState) {
-        levelState.create();
-        stateStack.push(levelState);
+    public void push(State state) {
+        state.create();
+        stateStack.push(state);
     }
 }

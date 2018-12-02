@@ -7,6 +7,7 @@ import com.ld43.game.entity.component.ProjectileLauncherComponent;
 import com.ld43.game.entity.projectiles.ProjectileBuilder;
 import com.ld43.game.entity.projectiles.ProjectileType;
 import com.ld43.game.entity.component.TowerTargetDeciderComponent;
+import com.ld43.game.input.InputHandler;
 
 public class ProjectileLauncherSystem extends EntitySystem {
     private ImmutableArray<Entity> entities;
@@ -25,6 +26,8 @@ public class ProjectileLauncherSystem extends EntitySystem {
         for (int i = 0; i < entities.size(); ++i) {
             Entity entity = entities.get(i);
             ProjectileLauncherComponent projectileLauncher = plm.get(entity);
+            if(!InputHandler.running) continue;
+
             PositionComponent position = pm.get(entity);
 
             TowerTargetDeciderComponent targetDecider = tm.get(entity);
@@ -36,6 +39,11 @@ public class ProjectileLauncherSystem extends EntitySystem {
             if(projectileId != null) {
 
                 float angle = targetDecider.getAngle(position.x, position.y, getEngine());
+
+                if(Float.isNaN(angle)) {
+                    projectileLauncher.setAvailable(projectileId);
+                    continue;
+                }
 
                 Entity p = ProjectileBuilder.projectile(projectileId, true, position.x, position.y, angle);
 

@@ -10,11 +10,15 @@ public class RenderableComponent implements Component {
     public int height;
     public float rotation;
 
-    public RenderableComponent(TextureRegion texture, int width, int height){
+    public RenderableComponent(TextureRegion texture, int width, int height, float rotation){
         this.texture = texture;
         this.width = width;
         this.height = height;
-        this.rotation = (float) Math.PI / 2;
+        this.rotation = rotation;
+    }
+
+    public RenderableComponent(TextureRegion texture, int width, int height){
+        this(texture, width, height, 0);
     }
 
     public RenderableComponent(TextureRegion texture){

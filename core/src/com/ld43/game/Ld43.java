@@ -17,7 +17,7 @@ public class Ld43 extends ApplicationAdapter {
         TextureRegistry.loadTextures();
 
         stateManager = new StateManager();
-        stateManager.push(new LevelOne());
+        stateManager.push(new LevelOne(stateManager));
 
 		InputHandler inputProcessor = new InputHandler();
 		Gdx.input.setInputProcessor(inputProcessor);

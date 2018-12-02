@@ -15,9 +15,14 @@ import com.ld43.game.entity.system.*;
 import com.ld43.game.input.InputHandler;
 import com.ld43.game.map.TileMap;
 
+import java.util.List;
+
 public abstract class LevelState extends State {
 
     public static final int NUM_OF_TILES = 31;
+
+    public List<Entity> availableBoats;
+    public Entity tower;
 
     private OrthographicCamera camera;
     private ShapeRenderer shapeRenderer;
@@ -33,9 +38,11 @@ public abstract class LevelState extends State {
     Family hasHealthBar = Family.all(HealthComponent.class, RenderableComponent.class, PositionComponent.class).get();
     Family canBeFocused = Family.all(FocusableComponent.class, RenderableComponent.class, PositionComponent.class).get();
 
-    public LevelState(String tileMapFileName){
-
+    public LevelState(StateManager stateManager, String tileMapFileName, List<Entity> availableBoats, Entity tower){
+        super(stateManager);
         map = TileMap.fromFile(tileMapFileName);
+        this.availableBoats = availableBoats;
+        this.tower = tower;
 
     }
 
@@ -60,6 +67,12 @@ public abstract class LevelState extends State {
         engine.addSystem(new ProjectileCollisionSystem());
         engine.addSystem(new BoatProjectileLauncherSystem());
         engine.addSystem(new FocusedSystem());
+        engine.addSystem(new GameConditionSystem(stateManager, new LoseState(stateManager), new WinState(stateManager)));
+
+        engine.addEntity(tower);
+        for (Entity boat: availableBoats) {
+            engine.addEntity(boat);
+        }
 
     }
 

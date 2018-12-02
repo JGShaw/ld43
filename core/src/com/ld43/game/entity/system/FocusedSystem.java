@@ -30,25 +30,33 @@ public class FocusedSystem extends EntitySystem {
 
         Entity focused = null;
 
+        for(Entity entity: entities){
+            FocusableComponent fc = fm.get(entity);
+            if(fc.focused){
+                focused = entity;
+                break;
+            }
+        }
+
+        for(Entity entity: entities){
+            FocusableComponent fc = fm.get(entity);
+            fc.focused = false;
+        }
+
         for(Entity entity : entities) {
             PositionComponent pc = pm.get(entity);
             FocusableComponent fc = fm.get(entity);
 
-            if(fc.focused && focused == null) {
+            double distance = Math.sqrt(Math.pow(pc.x - touchDownX, 2) + Math.pow(pc.y - touchDownY, 2));
+            if(distance < fc.radius) {
                 focused = entity;
-            } else {
-                double distance = Math.sqrt(Math.pow(pc.x - touchDownX, 2) + Math.pow(pc.y - touchDownY, 2));
-                if(distance < fc.radius) {
-                    fc.focused = true;
-                    if(focused != null) {
-                        fm.get(focused).focused = false;
-                    }
-                    focused = entity;
-                } else {
-                    fc.focused = false;
-                }
+                break;
             }
         }
+
+        if(focused != null)
+            fm.get(focused).focused = true;
+
         InputHandler.resetTouchDown();
     }
 }

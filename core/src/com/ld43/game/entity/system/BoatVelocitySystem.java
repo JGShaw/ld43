@@ -47,6 +47,7 @@ public class BoatVelocitySystem extends EntitySystem {
                 InputHandler.resetTileTouchDown();
             }
 
+            if(!InputHandler.running) continue;
             route.updateWaypoint(position.x, position.y);
             if(route.isComplete()) {
                 velocity.x = 0;

@@ -12,11 +12,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class Boat {
-    public static Entity placeBoat(float x, float y){
+    public static Entity placeBoat(float x, float y, float r){
         Entity boat = new Entity();
-        boat.add(new RenderableComponent(TextureRegistry.getTexture("boat-0")));
+        boat.add(new RenderableComponent(TextureRegistry.getTexture("boat-0"), 32, 32, r));
         boat.add(new PositionComponent(x, y));
-        boat.add(new VelocityComponent(32f, 32f, 32f));
+        boat.add(new VelocityComponent(0f, 0f, 32f));
         boat.add(new CollisionComponent(14));
         boat.add(new FocusableComponent(false, 16));
         boat.add(new BoatComponent());
@@ -31,5 +31,9 @@ public class Boat {
         );
 
         return boat;
+    }
+
+    public static Entity placeBoat(float x, float y) {
+        return placeBoat(x, y, 0);
     }
 }

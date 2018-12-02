@@ -4,7 +4,12 @@ import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.MathUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TowerTargetDeciderComponent implements Component {
+
+    public static final float MAX_SIGHT_RANGE = 420;
 
     public enum TowerBehaviour {
         CLOSEST,
@@ -38,39 +43,49 @@ public class TowerTargetDeciderComponent implements Component {
 
         ImmutableArray<Entity> boats = engine.getEntitiesFor(familyBoat);
 
+        List<Entity> inRange = new ArrayList<Entity>();
+        for(Entity boat: boats){
+            PositionComponent pos = pm.get(boat);
+            if(Math.sqrt(Math.pow(pos.x - towerX, 2) + Math.pow(pos.y - towerY, 2)) < MAX_SIGHT_RANGE){
+                inRange.add(boat);
+            }
+        }
+
         switch (behaviour){
             case CLOSEST:
-                return getClosest(towerX, towerY, boats);
+                return getClosest(towerX, towerY, inRange);
             case LOWEST_MAGNITUDE_HEALTH:
-                return getLowestMagnitudeHealth(towerX, towerY, boats);
+                return getLowestMagnitudeHealth(towerX, towerY, inRange);
             case HIGHEST_MAGNITUDE_HEALTH:
-                return getHighestMagnitudeHealth(towerX, towerY, boats);
+                return getHighestMagnitudeHealth(towerX, towerY, inRange);
             case LOWEST_PERCENTAGE_HEALTH:
-                return getLowestPercentageHealth(towerX, towerY, boats);
+                return getLowestPercentageHealth(towerX, towerY, inRange);
             case HIGHEST_PERCENTAGE_HEALTH:
-                return getHighestPercentageHealth(towerX, towerY, boats);
+                return getHighestPercentageHealth(towerX, towerY, inRange);
             case RANDOM_TARGET:
-                return randomTarget(towerX, towerY, boats);
+                return randomTarget(towerX, towerY, inRange);
             case RANDOM:
             default:
-                return MathUtils.random(0, MathUtils.PI2);
+                return Float.NaN;
         }
 
     }
 
-    private float randomTarget(float towerX, float towerY, ImmutableArray<Entity> boats) {
+    private float randomTarget(float towerX, float towerY, List<Entity> boats) {
 
         if(boats.size() == 0){
-            return MathUtils.random(0, MathUtils.PI2);
+            return Float.NaN;
         } else {
-            Entity random = boats.random();
+            Entity random = boats.get(MathUtils.random(0, boats.size()-1));
             PositionComponent pos = pm.get(random);
             return (float)com.ld43.game.math.MathUtils.angleBetweenPoints(towerX, towerY, pos.x, pos.y);
         }
 
     }
 
-    private float getClosest(float towerX, float towerY, ImmutableArray<Entity> boats){
+    private float getClosest(float towerX, float towerY, List<Entity> boats){
+
+        if(boats.size() == 0) return Float.NaN;
 
         PositionComponent closest = null;
         float closestDistance = Float.MAX_VALUE;
@@ -94,7 +109,9 @@ public class TowerTargetDeciderComponent implements Component {
 
     }
 
-    private float getLowestMagnitudeHealth(float towerX, float towerY, ImmutableArray<Entity> boats) {
+    private float getLowestMagnitudeHealth(float towerX, float towerY, List<Entity> boats) {
+
+        if(boats.size() == 0) return Float.NaN;
 
         PositionComponent target = null;
         float lowestHealth = Float.MAX_VALUE;
@@ -117,7 +134,9 @@ public class TowerTargetDeciderComponent implements Component {
 
     }
 
-    private float getLowestPercentageHealth(float towerX, float towerY, ImmutableArray<Entity> boats) {
+    private float getLowestPercentageHealth(float towerX, float towerY, List<Entity> boats) {
+
+        if(boats.size() == 0) return Float.NaN;
 
         PositionComponent target = null;
         float lowestHealth = Float.MAX_VALUE;
@@ -142,7 +161,9 @@ public class TowerTargetDeciderComponent implements Component {
 
     }
 
-    private float getHighestMagnitudeHealth(float towerX, float towerY, ImmutableArray<Entity> boats) {
+    private float getHighestMagnitudeHealth(float towerX, float towerY, List<Entity> boats) {
+
+        if(boats.size() == 0) return Float.NaN;
 
         PositionComponent target = null;
         float highestHealth = 0;
@@ -165,7 +186,9 @@ public class TowerTargetDeciderComponent implements Component {
 
     }
 
-    private float getHighestPercentageHealth(float towerX, float towerY, ImmutableArray<Entity> boats) {
+    private float getHighestPercentageHealth(float towerX, float towerY, List<Entity> boats) {
+
+        if(boats.size() == 0) return Float.NaN;
 
         PositionComponent target = null;
         float highestHealth = 0;

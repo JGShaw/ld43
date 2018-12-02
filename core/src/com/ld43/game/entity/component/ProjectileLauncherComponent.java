@@ -9,6 +9,7 @@ import java.util.List;
 public class ProjectileLauncherComponent implements Component {
 
     public List<ProjectileTimer> availableProjectiles;
+    public boolean enabled;
 
     public ProjectileLauncherComponent(List<ProjectileTimer> availableProjectiles){
         this.availableProjectiles = availableProjectiles;
@@ -37,6 +38,17 @@ public class ProjectileLauncherComponent implements Component {
         }
 
         return projectile;
+
+    }
+
+    public void setAvailable(ProjectileType projectileId) {
+
+        for (ProjectileTimer projectile: availableProjectiles) {
+            if(projectile.projectileId == projectileId){
+                projectile.timeUntilAvailable = 0;
+                return;
+            }
+        }
 
     }
 }

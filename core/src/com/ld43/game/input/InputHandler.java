@@ -1,13 +1,9 @@
 package com.ld43.game.input;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.ld43.game.Ld43;
 import com.ld43.game.map.tiles.Tile;
 import com.ld43.game.state.LevelState;
-
-import java.util.List;
 
 public class InputHandler extends InputAdapter {
     public static float touchDownX = -1;
@@ -16,7 +12,20 @@ public class InputHandler extends InputAdapter {
     public static int tileTouchUpX = -1;
     public static int tileTouchUpY = -1;
 
+    public static boolean running;
+    public static long runningChangedAt = 0;
+
     public static int scrolled;
+
+    @Override
+    public boolean keyUp (int down) {
+
+        if(down == 62 && System.currentTimeMillis() - runningChangedAt > 1000){
+            running = !running;
+            runningChangedAt = System.currentTimeMillis();
+        }
+        return false;
+    }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
