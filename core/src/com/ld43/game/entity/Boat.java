@@ -18,6 +18,7 @@ public class Boat {
         boat.add(new PositionComponent(x, y));
         boat.add(new VelocityComponent(32f, 32f, 32f));
         boat.add(new CollisionComponent(14));
+        boat.add(new FocusableComponent(false, 16));
         boat.add(new BoatComponent());
 
         List<Tile> waypoints = new ArrayList<Tile>();

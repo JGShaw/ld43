@@ -6,7 +6,6 @@ import com.ld43.game.map.tiles.Tile;
 import com.ld43.game.math.MathUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class RouteComponent implements Component {

@@ -2,10 +2,7 @@ package com.ld43.game.entity.system;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.ld43.game.entity.component.PositionComponent;
-import com.ld43.game.entity.component.RenderableComponent;
-import com.ld43.game.entity.component.RouteComponent;
-import com.ld43.game.entity.component.VelocityComponent;
+import com.ld43.game.entity.component.*;
 import com.ld43.game.input.InputHandler;
 import com.ld43.game.map.TileMap;
 import com.ld43.game.math.MathUtils;
@@ -19,6 +16,7 @@ public class BoatVelocitySystem extends EntitySystem {
     private ComponentMapper<VelocityComponent> vm = ComponentMapper.getFor(VelocityComponent.class);
     private ComponentMapper<RouteComponent> rm = ComponentMapper.getFor(RouteComponent.class);
     private ComponentMapper<RenderableComponent> renm = ComponentMapper.getFor(RenderableComponent.class);
+    private ComponentMapper<FocusableComponent> fm = ComponentMapper.getFor(FocusableComponent.class);
 
     public BoatVelocitySystem(TileMap tileMap) {
         this.tileMap = tileMap;
@@ -28,7 +26,8 @@ public class BoatVelocitySystem extends EntitySystem {
         entities = engine.getEntitiesFor(Family.all(PositionComponent.class,
                 VelocityComponent.class,
                 RouteComponent.class,
-                RenderableComponent.class).get());
+                RenderableComponent.class,
+                FocusableComponent.class).get());
     }
 
     public void update(float deltaTime) {
@@ -38,11 +37,12 @@ public class BoatVelocitySystem extends EntitySystem {
             VelocityComponent velocity = vm.get(entity);
             RouteComponent route = rm.get(entity);
             RenderableComponent render = renm.get(entity);
+            FocusableComponent fc = fm.get(entity);
 
             int tileX = InputHandler.tileTouchUpX;
             int tileY = InputHandler.tileTouchUpY;
 
-            if(tileX != -1 && tileY != -1 && InputHandler.boatNumber == i) {
+            if(tileX != -1 && tileY != -1 && fc.focused) {
                 route.addToPath(tileMap.getTile(tileX, tileY));
                 InputHandler.resetTileTouchDown();
             }

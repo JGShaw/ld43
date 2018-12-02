@@ -1,5 +1,6 @@
 package com.ld43.game;
 
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -35,9 +36,11 @@ public class Ld43 extends ApplicationAdapter {
 	private ProjectileCollisionSystem pcs = new ProjectileCollisionSystem();
 	private HealthUpdateSystem hus = new HealthUpdateSystem();
 	private BoatProjectileLauncherSystem bpls = new BoatProjectileLauncherSystem();
+	private FocusedSystem fs = new FocusedSystem();
 	private Family renderable = Family.all(RenderableComponent.class, PositionComponent.class).exclude(UnderwaterComponent.class).get();
 	private Family renderableUnderwater = Family.all(RenderableComponent.class, PositionComponent.class, UnderwaterComponent.class).get();
 	private Family hasHealthBar = Family.all(HealthComponent.class, RenderableComponent.class, PositionComponent.class).get();
+	private Family canBeFocused = Family.all(FocusableComponent.class ,RenderableComponent.class, PositionComponent.class).get();
 
     private Entity tower = new Entity();
 
@@ -73,6 +76,7 @@ public class Ld43 extends ApplicationAdapter {
 		engine.addSystem(hus);
 		engine.addSystem(pcs);
 		engine.addSystem(bpls);
+		engine.addSystem(fs);
 	}
 
 	@Override
@@ -93,6 +97,11 @@ public class Ld43 extends ApplicationAdapter {
 
 		batch.begin();
 		map.render(batch);
+		batch.end();
+
+		renderFocused();
+
+		batch.begin();
 		renderEntities(renderable);
 		batch.end();
 
@@ -123,12 +132,34 @@ public class Ld43 extends ApplicationAdapter {
 
 	}
 
+	private void renderFocused() {
+		ImmutableArray<Entity> entities = engine.getEntitiesFor(canBeFocused);
+		for(Entity entity : entities) {
+			FocusableComponent fc = entity.getComponent(FocusableComponent.class);
+
+			if(fc.focused) {
+				RenderableComponent rc = entity.getComponent(RenderableComponent.class);
+				PositionComponent pc = entity.getComponent(PositionComponent.class);
+
+				shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+				shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+				shapeRenderer.setColor(Color.ORANGE);
+				shapeRenderer.circle(pc.x, pc.y, rc.width * 0.6f);
+				shapeRenderer.end();
+			}
+		}
+	}
+
 	private void renderRoutes() {
-		ImmutableArray<Entity> routes = engine.getEntitiesFor(Family.all(RouteComponent.class).get());
+		ImmutableArray<Entity> routes = engine.getEntitiesFor(Family.all(RouteComponent.class, FocusableComponent.class).get());
 		for(Entity entity: routes) {
-			RouteComponent routeComponent = entity.getComponent(RouteComponent.class);
+			RouteComponent rc = entity.getComponent(RouteComponent.class);
+			FocusableComponent fc = entity.getComponent(FocusableComponent.class);
+
+			if(!fc.focused) { continue; }
+
 			routeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-			routeComponent.renderRoute(routeRenderer);
+			rc.renderRoute(routeRenderer);
 		}
 	}
 
