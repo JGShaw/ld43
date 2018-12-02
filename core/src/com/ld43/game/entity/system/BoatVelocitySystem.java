@@ -41,10 +41,13 @@ public class BoatVelocitySystem extends EntitySystem {
             RouteComponent route = rm.get(entity);
             RenderableComponent render = renm.get(entity);
 
-            if(RoutePlanner.tileTouchUpX != -1 && RoutePlanner.tileTouchUpY != -1) {
-                Tile tile = new LandTile(RoutePlanner.tileTouchUpX, RoutePlanner.tileTouchUpY, true);
+            int tileX = RoutePlanner.tileTouchUpX;
+            int tileY = RoutePlanner.tileTouchUpY;
+
+            if(tileX != -1 && tileY != -1) {
+                Tile tile = new LandTile(tileX, tileY, true);
+                tileMap.setTile(tileX, tileY, tile);
                 route.addToPath(tile);
-                tileMap.setTile(RoutePlanner.tileTouchUpX, RoutePlanner.tileTouchUpY, tile);
                 RoutePlanner.resetTileTouchUp();
             }
 
