@@ -27,10 +27,6 @@ public class HealthUpdateSystem extends EntitySystem {
             Entity entity = entities.get(i);
             HealthComponent health = hm.get(entity);
 
-            if(InputHandler.scrolled != 0){
-                health.takeDamage(20);
-            }
-
             health.update(deltaTime);
 
             if(health.isDead()) {
@@ -50,9 +46,6 @@ public class HealthUpdateSystem extends EntitySystem {
                 getEngine().removeEntity(entity);
 
             }
-
         }
-
-        InputHandler.scrolled = 0;
     }
 }

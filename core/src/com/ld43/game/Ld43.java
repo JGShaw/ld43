@@ -15,12 +15,11 @@ import com.badlogic.gdx.math.Affine2;
 import com.ld43.game.entity.Boat;
 import com.ld43.game.entity.component.*;
 import com.ld43.game.entity.system.*;
+import com.ld43.game.entity.tower.Tower;
 import com.ld43.game.graphics.TextureRegistry;
 import com.ld43.game.input.InputHandler;
 import com.ld43.game.map.TileMap;
-
-import java.util.ArrayList;
-import java.util.List;
+import static com.ld43.game.entity.component.TowerTargetDeciderComponent.TowerBehaviour.RANDOM_TARGET;
 
 public class Ld43 extends ApplicationAdapter {
 	public static final int NUM_OF_TILES = 31;
@@ -35,11 +34,10 @@ public class Ld43 extends ApplicationAdapter {
 	private ProjectileLauncherSystem pls = new ProjectileLauncherSystem();
 	private ProjectileCollisionSystem pcs = new ProjectileCollisionSystem();
 	private HealthUpdateSystem hus = new HealthUpdateSystem();
+	private BoatProjectileLauncherSystem bpls = new BoatProjectileLauncherSystem();
 	private Family renderable = Family.all(RenderableComponent.class, PositionComponent.class).exclude(UnderwaterComponent.class).get();
 	private Family renderableUnderwater = Family.all(RenderableComponent.class, PositionComponent.class, UnderwaterComponent.class).get();
 	private Family hasHealthBar = Family.all(HealthComponent.class, RenderableComponent.class, PositionComponent.class).get();
-
-	private List<Entity> boats = new ArrayList<Entity>();
 
     private Entity tower = new Entity();
 
@@ -65,18 +63,14 @@ public class Ld43 extends ApplicationAdapter {
 
 		engine.addEntity(Boat.placeBoat(16, 16));
 		engine.addEntity(Boat.placeBoat(700, 700));
-
-		tower.add(new RenderableComponent(TextureRegistry.getTexture("projectile"), 64, 64));
-		tower.add(new PositionComponent(496f, 496f));
-		tower.add(new ProjectileLauncherComponent());
-		tower.add(new HealthComponent(1000, 1000));
-		engine.addEntity(tower);
+		engine.addEntity(Tower.createTower(496, 496, 1000, RANDOM_TARGET));
 
 		engine.addSystem(ms);
 		engine.addSystem(new BoatVelocitySystem(map));
 		engine.addSystem(pls);
 		engine.addSystem(hus);
 		engine.addSystem(pcs);
+		engine.addSystem(bpls);
 	}
 
 	@Override
