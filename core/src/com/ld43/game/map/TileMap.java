@@ -1,6 +1,7 @@
 package com.ld43.game.map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.ld43.game.graphics.TextureRegistry;
@@ -24,14 +25,17 @@ public class TileMap {
     }
 
     public void render(Batch batch){
+        Color c = batch.getColor();
         for (int y = 0; y < heightInTiles; y++) {
             for (int x = 0; x < widthInTiles; x++) {
                 Tile tile = tiles[x + y * widthInTiles];
+                batch.setColor(c.r, c.g, c.b, tile instanceof WaterTile ? 0.7f : 1f);
                 TextureRegion img = tile.getTexture();
                 batch.draw(img, tile.getX() - Tile.TILE_WIDTH / 2, tile.getY() - Tile.TILE_WIDTH / 2, Tile.TILE_WIDTH, Tile.TILE_WIDTH);
             }
         }
-
+        c = batch.getColor();
+        batch.setColor(c.r, c.g, c.b, 1f);
     }
 
     public Tile[] getTiles() {
@@ -118,10 +122,12 @@ public class TileMap {
             int x = tile.getX();
             int y = heightInTiles - tile.getY() - 1;
 
-            WaterTile newTile = new WaterTile(x, y, tile.getTile() > 0);
+            Tile newTile;
             if(tile.getTile() <= 13){
+                newTile = new WaterTile(x, y, tile.getTile() > 0);
                 newTile.setTexture(TextureRegistry.getTexture("tile-water--" + tile.getTile()));
             }else {
+                newTile = new LandTile(x, y, true);
                 newTile.setTexture(TextureRegistry.getTexture("tile-land--" + (tile.getTile() - 18)));
             }
             tiles[x + y * widthInTiles] = newTile;

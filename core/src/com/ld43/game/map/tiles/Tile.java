@@ -47,4 +47,6 @@ public abstract class Tile {
     public static float getActualSize() {
         return Gdx.graphics.getHeight() /(float) Ld43.NUM_OF_TILES;
     }
+
+    public abstract void setTexture(TextureRegion texture);
 }

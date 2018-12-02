@@ -5,6 +5,7 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.ld43.game.entity.component.HealthComponent;
 import com.ld43.game.entity.component.PositionComponent;
 import com.ld43.game.entity.component.RenderableComponent;
+import com.ld43.game.entity.component.UnderwaterComponent;
 import com.ld43.game.graphics.TextureRegistry;
 import com.ld43.game.input.InputHandler;
 
@@ -41,6 +42,7 @@ public class HealthUpdateSystem extends EntitySystem {
                     RenderableComponent rc = rm.get(entity);
                     rc.texture = TextureRegistry.getTexture(health.deathTextureName);
                     dead.add(rc);
+                    dead.add(new UnderwaterComponent());
                     getEngine().addEntity(dead);
 
                 }

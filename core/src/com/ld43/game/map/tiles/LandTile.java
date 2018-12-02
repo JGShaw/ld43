@@ -16,4 +16,9 @@ public class LandTile extends Tile {
         return texture;
     }
 
+    @Override
+    public void setTexture(TextureRegion texture) {
+        this.texture = texture;
+    }
+
 }

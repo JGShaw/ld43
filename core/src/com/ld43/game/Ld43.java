@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Affine2;
 import com.ld43.game.entity.Boat;
@@ -36,7 +35,8 @@ public class Ld43 extends ApplicationAdapter {
 	private ProjectileLauncherSystem pls = new ProjectileLauncherSystem();
 	private ProjectileCollisionSystem pcs = new ProjectileCollisionSystem();
 	private HealthUpdateSystem hus = new HealthUpdateSystem();
-	private Family renderable = Family.all(RenderableComponent.class, PositionComponent.class).get();
+	private Family renderable = Family.all(RenderableComponent.class, PositionComponent.class).exclude(UnderwaterComponent.class).get();
+	private Family renderableUnderwater = Family.all(RenderableComponent.class, PositionComponent.class, UnderwaterComponent.class).get();
 	private Family hasHealthBar = Family.all(HealthComponent.class, RenderableComponent.class, PositionComponent.class).get();
 
 	private List<Entity> boats = new ArrayList<Entity>();
@@ -52,7 +52,7 @@ public class Ld43 extends ApplicationAdapter {
         TextureRegistry.loadTextures();
 		map =  TileMap.fromFile("tiles/tileMap.json");
 
-		batch = new SpriteBatch();
+		batch = new SpriteBatch(2000);
 		shapeRenderer = new ShapeRenderer();
 
 		camera = new OrthographicCamera(31*32, 31*32);
@@ -81,7 +81,7 @@ public class Ld43 extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(1, 0, 1, 1);
+		Gdx.gl.glClearColor(68/255f, 157/255f,  223/255f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		camera.update();
@@ -89,18 +89,16 @@ public class Ld43 extends ApplicationAdapter {
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
+
+		renderEntities(renderableUnderwater);
 		map.render(batch);
+		renderEntities(renderable);
+		batch.end();
 
-		ImmutableArray<Entity> renderables = engine.getEntitiesFor(renderable);
+		renderHealthBars();
+	}
 
-		for(Entity entity: renderables){
-			RenderableComponent rc = entity.getComponent(RenderableComponent.class);
-			PositionComponent pc = entity.getComponent(PositionComponent.class);
-
-			Affine2 rotation = new Affine2().translate(pc.x, pc.y).rotateRad(-rc.rotation).translate(-rc.width / 2, -rc.height / 2);
-			batch.draw(new TextureRegion(rc.texture), rc.width, rc.height, rotation);
-		}
-
+	private void renderHealthBars() {
 		ImmutableArray<Entity> hasHealthBarEntities = engine.getEntitiesFor(hasHealthBar);
 
 		for (Entity entity: hasHealthBarEntities) {
@@ -124,10 +122,20 @@ public class Ld43 extends ApplicationAdapter {
 			shapeRenderer.end();
 
 		}
-
-		batch.end();
 	}
-	
+
+	private void renderEntities(Family family) {
+		ImmutableArray<Entity> renderablesUnderwater = engine.getEntitiesFor(family);
+
+		for (Entity entity : renderablesUnderwater) {
+			RenderableComponent rc = entity.getComponent(RenderableComponent.class);
+			PositionComponent pc = entity.getComponent(PositionComponent.class);
+
+			Affine2 rotation = new Affine2().translate(pc.x, pc.y).rotateRad(-rc.rotation).translate(-rc.width / 2, -rc.height / 2);
+			batch.draw(rc.texture, rc.width, rc.height, rotation);
+		}
+	}
+
 	@Override
 	public void dispose () {
 		batch.dispose();
