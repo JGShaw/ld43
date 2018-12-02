@@ -4,11 +4,11 @@ import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.ld43.game.entity.component.*;
 
+import java.text.CollationElementIterator;
+
 public class ProjectileCollisionSystem extends EntitySystem {
     private ImmutableArray<Entity> entities;
 
-    private ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
-    private ComponentMapper<VelocityComponent> vm = ComponentMapper.getFor(VelocityComponent.class);
     private ComponentMapper<ProjectileComponent> prm = ComponentMapper.getFor(ProjectileComponent.class);
     private ComponentMapper<HealthComponent> hm = ComponentMapper.getFor(HealthComponent.class);
 
@@ -22,19 +22,31 @@ public class ProjectileCollisionSystem extends EntitySystem {
         for (int i = 0; i < entities.size(); ++i) {
             Entity entity = entities.get(i);
 
-            ImmutableArray<Entity> boats = getEngine().getEntitiesFor(Family.all(PositionComponent.class, CollisionComponent.class, RouteComponent.class, HealthComponent.class).get());
+            ProjectileComponent pc = prm.get(entity);
 
-            for(Entity boat : boats) {
+            if(pc.enemy){
+                ImmutableArray<Entity> boats = getEngine().getEntitiesFor(Family.all(PositionComponent.class, CollisionComponent.class, RouteComponent.class, HealthComponent.class).get());
 
-                if(isCollisionBetween(entity, boat)){
+                for(Entity boat : boats) {
 
-                    ProjectileComponent pc = prm.get(entity);
-                    HealthComponent boatHealth = hm.get(boat);
-                    boatHealth.takeDamage(pc.damage);
-                    getEngine().removeEntity(entity);
+                    if(isCollisionBetween(entity, boat)){
+                        HealthComponent boatHealth = hm.get(boat);
+                        boatHealth.takeDamage(pc.damage);
+                        getEngine().removeEntity(entity);
+                    }
 
                 }
+            } else {
+                ImmutableArray<Entity> towers = getEngine().getEntitiesFor(Family.all(TowerComponent.class, CollisionComponent.class).get());
 
+                for(Entity tower : towers) {
+
+                    if(isCollisionBetween(entity, tower)){
+                        HealthComponent boatHealth = hm.get(tower);
+                        boatHealth.takeDamage(pc.damage);
+                        getEngine().removeEntity(entity);
+                    }
+                }
             }
         }
     }
