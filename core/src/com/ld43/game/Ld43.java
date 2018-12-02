@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Affine2;
+import com.ld43.game.entity.Boat;
 import com.ld43.game.entity.component.*;
 import com.ld43.game.entity.system.BoatVelocitySystem;
 import com.ld43.game.entity.system.HealthUpdateSystem;
@@ -21,8 +22,6 @@ import com.ld43.game.entity.system.ProjectileLauncherSystem;
 import com.ld43.game.graphics.TextureRegistry;
 import com.ld43.game.input.RoutePlanner;
 import com.ld43.game.map.TileMap;
-import com.ld43.game.map.tiles.Tile;
-import com.ld43.game.map.tiles.WaterTile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +41,7 @@ public class Ld43 extends ApplicationAdapter {
 	private Family renderable = Family.all(RenderableComponent.class, PositionComponent.class).get();
 	private Family hasHealthBar = Family.all(HealthComponent.class, RenderableComponent.class, PositionComponent.class).get();
 
-	private Entity boat = new Entity();
+	private List<Entity> boats = new ArrayList<Entity>();
 
     private Entity tower = new Entity();
 
@@ -63,20 +62,11 @@ public class Ld43 extends ApplicationAdapter {
 		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 		camera.update();
 
-		boat.add(new RenderableComponent(TextureRegistry.getTexture("boat")));
-		boat.add(new PositionComponent(16f, 16f));
-		boat.add(new VelocityComponent(32f, 32f, 32f));
-
-		List<Tile> waypoints = new ArrayList<Tile>();
-		waypoints.add(new WaterTile(0,0,false));
-		waypoints.add(new WaterTile(5,5, false));
-
 		RoutePlanner inputProcessor = new RoutePlanner();
 		Gdx.input.setInputProcessor(inputProcessor);
 
-		boat.add(new RouteComponent(waypoints));
-		boat.add(new HealthComponent(100, 100));
-		engine.addEntity(boat);
+		engine.addEntity(Boat.placeBoat(16, 16));
+		engine.addEntity(Boat.placeBoat(700, 700));
 
 		tower.add(new RenderableComponent(TextureRegistry.getTexture("projectile"), 64, 64));
 		tower.add(new PositionComponent(496f, 496f));
@@ -88,7 +78,6 @@ public class Ld43 extends ApplicationAdapter {
 		engine.addSystem(new BoatVelocitySystem(map));
 		engine.addSystem(pls);
 		engine.addSystem(hus);
-
 	}
 
 	@Override

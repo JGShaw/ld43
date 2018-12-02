@@ -56,7 +56,7 @@ public class BoatVelocitySystem extends EntitySystem {
                 velocity.x = 0;
                 velocity.y = 0;
             } else {
-                double angle = route.getAngle();
+                double angle = route.getAngle(position.x, position.y);
                 double[] vector = MathUtils.movementVectors(velocity.maxSpeed, angle);
                 velocity.x = (float) vector[0];
                 velocity.y = (float) vector[1];
