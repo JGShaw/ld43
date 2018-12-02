@@ -36,7 +36,7 @@ public class Ld43 extends ApplicationAdapter {
 	// Ashley ECS
 	private Engine engine = new Engine();
 	private MovementSystem ms = new MovementSystem();
-	private BoatVelocitySystem bvs = new BoatVelocitySystem();
+	private BoatVelocitySystem bvs;
 	private ProjectileLauncherSystem pls = new ProjectileLauncherSystem();
 	private HealthUpdateSystem hus = new HealthUpdateSystem();
 	private Family renderable = Family.all(RenderableComponent.class, PositionComponent.class).get();
@@ -71,7 +71,7 @@ public class Ld43 extends ApplicationAdapter {
 		waypoints.add(new WaterTile(0,0,false));
 		waypoints.add(new WaterTile(5,5, false));
 
-		RoutePlanner inputProcessor = new RoutePlanner(map, waypoints);
+		RoutePlanner inputProcessor = new RoutePlanner();
 		Gdx.input.setInputProcessor(inputProcessor);
 
 		boat.add(new RouteComponent(waypoints));
@@ -85,7 +85,7 @@ public class Ld43 extends ApplicationAdapter {
 		engine.addEntity(tower);
 
 		engine.addSystem(ms);
-		engine.addSystem(bvs);
+		engine.addSystem(new BoatVelocitySystem(map));
 		engine.addSystem(pls);
 		engine.addSystem(hus);
 

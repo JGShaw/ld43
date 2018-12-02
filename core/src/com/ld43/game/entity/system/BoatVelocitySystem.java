@@ -6,17 +6,25 @@ import com.ld43.game.entity.component.PositionComponent;
 import com.ld43.game.entity.component.RenderableComponent;
 import com.ld43.game.entity.component.RouteComponent;
 import com.ld43.game.entity.component.VelocityComponent;
+import com.ld43.game.input.RoutePlanner;
+import com.ld43.game.map.TileMap;
+import com.ld43.game.map.tiles.LandTile;
+import com.ld43.game.map.tiles.Tile;
 import com.ld43.game.math.MathUtils;
 
 public class BoatVelocitySystem extends EntitySystem {
     private ImmutableArray<Entity> entities;
+
+    private TileMap tileMap;
 
     private ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
     private ComponentMapper<VelocityComponent> vm = ComponentMapper.getFor(VelocityComponent.class);
     private ComponentMapper<RouteComponent> rm = ComponentMapper.getFor(RouteComponent.class);
     private ComponentMapper<RenderableComponent> renm = ComponentMapper.getFor(RenderableComponent.class);
 
-    public BoatVelocitySystem() {}
+    public BoatVelocitySystem(TileMap tileMap) {
+        this.tileMap = tileMap;
+    }
 
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(PositionComponent.class,
@@ -32,6 +40,16 @@ public class BoatVelocitySystem extends EntitySystem {
             VelocityComponent velocity = vm.get(entity);
             RouteComponent route = rm.get(entity);
             RenderableComponent render = renm.get(entity);
+
+            int tileX = RoutePlanner.tileTouchUpX;
+            int tileY = RoutePlanner.tileTouchUpY;
+
+            if(tileX != -1 && tileY != -1) {
+                Tile tile = new LandTile(tileX, tileY, true);
+                tileMap.setTile(tileX, tileY, tile);
+                route.addToPath(tile);
+                RoutePlanner.resetTileTouchUp();
+            }
 
             route.updateWaypoint(position.x, position.y);
             if(route.complete) {

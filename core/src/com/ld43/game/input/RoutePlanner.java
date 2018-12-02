@@ -2,38 +2,25 @@ package com.ld43.game.input;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
-import com.ld43.game.map.TileMap;
-import com.ld43.game.map.tiles.LandTile;
 import com.ld43.game.map.tiles.Tile;
-import com.ld43.game.map.tiles.WaterTile;
 
 import java.util.List;
 
 public class RoutePlanner extends InputAdapter {
+    public static int tileTouchUpX = -1;
+    public static int tileTouchUpY = -1;
 
     public static int scrolled;
-
-    TileMap tileMap;
-    private List<Tile> waypoints;
-
-    public RoutePlanner(TileMap tileMap, List<Tile> waypoints) {
-        this.tileMap = tileMap;
-        this.waypoints = waypoints;
+    public RoutePlanner() {
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         screenY = Gdx.graphics.getHeight() - screenY;
-        int tileX = (int) Math.floor(screenX / Tile.getActualSize());
-        int tileY = (int) Math.floor(screenY / Tile.getActualSize());
-        Tile tile = new LandTile(tileX, tileY, true);
-        waypoints.add(tile);
-        tileMap.setTile(tileX, tileY, tile);
-
-
+        tileTouchUpX = (int) Math.floor(screenX / Tile.getActualSize());
+        tileTouchUpY = (int) Math.floor(screenY / Tile.getActualSize());
         return true;
     }
-
 
     @Override
     public boolean scrolled (int amount) {
@@ -43,5 +30,8 @@ public class RoutePlanner extends InputAdapter {
         return false;
     }
 
-
+    public static void resetTileTouchUp(){
+        tileTouchUpX = -1;
+        tileTouchUpY = -1;
+    }
 }
