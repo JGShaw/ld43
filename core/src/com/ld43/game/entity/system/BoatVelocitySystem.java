@@ -48,7 +48,7 @@ public class BoatVelocitySystem extends EntitySystem {
             }
 
             route.updateWaypoint(position.x, position.y);
-            if(route.complete) {
+            if(route.isComplete()) {
                 velocity.x = 0;
                 velocity.y = 0;
             } else {

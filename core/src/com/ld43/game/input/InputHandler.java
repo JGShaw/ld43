@@ -22,7 +22,7 @@ public class InputHandler extends InputAdapter {
     }
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
         screenY = Gdx.graphics.getHeight() - screenY;
         tileTouchUpX = (int) Math.floor(screenX / Tile.getActualSize());
         tileTouchUpY = (int) Math.floor(screenY / Tile.getActualSize());

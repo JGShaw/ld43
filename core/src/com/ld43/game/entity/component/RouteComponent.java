@@ -5,47 +5,61 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.ld43.game.map.tiles.Tile;
 import com.ld43.game.math.MathUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class RouteComponent implements Component {
     public List<Tile> route;
-    public int tileIndex = 0;
-    public boolean complete = true;
+    public Tile from;
 
     public RouteComponent(List<Tile> route){
         this.route = route;
     }
 
     public double getAngle(float x, float y) {
-        Tile to = route.get(tileIndex);
+        Tile to = route.get(0);
         return MathUtils.angleBetweenPoints(x, y, to.getX(), to.getY());
     }
 
     public void updateWaypoint(float x, float y) {
-        if(complete) { return; }
-        Tile tile = route.get(tileIndex);
+        if(isComplete()) { return; }
+        Tile tile = route.get(0);
 
         double distance = Math.sqrt(Math.pow(tile.getX() - x, 2) + Math.pow(tile.getY() - y, 2));
 
         if(distance < 2f) {
-            tileIndex += 1;
-            complete = tileIndex >= route.size();
+            from = route.get(0);
+            route.remove(0);
         }
+    }
+
+    public boolean isComplete(){
+        return route.isEmpty();
     }
 
     public void addToPath(Tile tile) {
         route.add(tile);
-        complete = false;
     }
 
     public float[] polylinePoints() {
-        float[] points = new float[route.size() * 2];
-        for(int i = 0; i < route.size() * 2; i+=2) {
-            Tile t = route.get(i / 2);
-            points[i] = t.getX();
-            points[i + 1] = t.getY();
+        List<Integer> points = new ArrayList<Integer>();
+
+        if(from != null) {
+            points.add(from.getX());
+            points.add(from.getY());
         }
-        return points;
+
+        for(Tile tile : route) {
+            points.add(tile.getX());
+            points.add(tile.getY());
+        }
+
+        float[] floats = new float[points.size()];
+        for(int i = 0; i < points.size(); i++) {
+            floats[i] = points.get(i).floatValue();
+        }
+        return floats;
     }
 
     public void renderRoute(ShapeRenderer renderer) {
