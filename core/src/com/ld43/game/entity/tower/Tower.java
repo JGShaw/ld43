@@ -21,7 +21,7 @@ public class Tower {
 
         Entity tower = new Entity();
 
-        tower.add(new RenderableComponent(TextureRegistry.getTexture("projectile"), 64, 64));
+        tower.add(new RenderableComponent(TextureRegistry.getTexture("tower"), 64, 64));
         tower.add(new CollisionComponent(32));
         tower.add(new PositionComponent(posX, posY));
 
