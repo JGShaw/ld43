@@ -70,6 +70,9 @@ public class TextureRegistry {
         registerTexture("boat-0", "entities/boat/boat-0.png");
         registerTexture("boat-0--sunk", "entities/boat/boat-0--sunk.png");
 
+        registerTexture("tower", "entities/tower/tower.png");
+        registerTexture("gun", "entities/tower/gun.png");
+
         defaultTexture = new TextureRegion(new Texture("badlogic.jpg"));
 
     }
