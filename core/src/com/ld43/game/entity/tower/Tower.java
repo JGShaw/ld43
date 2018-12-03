@@ -26,6 +26,7 @@ public class Tower {
         tower.add(new PositionComponent(posX, posY));
 
         ArrayList<ProjectileTimer> availableProjectiles = new ArrayList<ProjectileTimer>();
+        availableProjectiles.add(new ProjectileTimer(ProjectileType.PROJECTILE_HOMING, 20f, 5f));
         availableProjectiles.add(new ProjectileTimer(ProjectileType.PROJECTILE_HUGE, 10f, 3f));
         availableProjectiles.add(new ProjectileTimer(ProjectileType.PROJECTILE_LARGE, 6f, 2f));
         availableProjectiles.add(new ProjectileTimer(ProjectileType.PROJECTILE_MEDIUM, 3f, 1f));

@@ -14,7 +14,7 @@ public class MovementSystem extends EntitySystem {
     private ComponentMapper<VelocityComponent> vm = ComponentMapper.getFor(VelocityComponent.class);
     private ComponentMapper<ProjectileComponent> prm = ComponentMapper.getFor(ProjectileComponent.class);
 
-    public MovementSystem() {}
+    public MovementSystem(int priority) { super(priority); }
 
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(PositionComponent.class, VelocityComponent.class).get());

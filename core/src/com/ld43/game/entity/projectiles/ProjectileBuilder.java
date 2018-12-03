@@ -7,10 +7,17 @@ import com.ld43.game.graphics.TextureRegistry;
 
 public class ProjectileBuilder {
 
-    public static Entity projectile(ProjectileType projectileId, boolean enemy, float xPos, float yPos, float angle){
+    public static Entity projectile(ProjectileType projectileId, boolean enemy, float xPos, float yPos, Entity target){
+        return projectile(projectileId, enemy, xPos, yPos, target, 0);
+    }
+
+    public static Entity projectile(ProjectileType projectileId, boolean enemy, float xPos, float yPos, Entity target, float variation){
 
         Entity entity = new Entity();
         entity.add(new PositionComponent(xPos, yPos));
+
+        PositionComponent targetPos = target.getComponent(PositionComponent.class);
+        Float angle = (float)com.ld43.game.math.MathUtils.angleBetweenPoints(xPos, yPos, targetPos.x, targetPos.y) + variation;
 
         float xVelComp = MathUtils.sin(angle);
         float yVelComp = MathUtils.cos(angle);
@@ -41,6 +48,13 @@ public class ProjectileBuilder {
                 entity.add(new VelocityComponent(xVelComp * 50, yVelComp * 50, 0));
                 entity.add(new CollisionComponent(14));
                 entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile--huge"), 32, 32, angle));
+                break;
+            case PROJECTILE_HOMING:
+                entity.add(new ProjectileComponent(75, enemy));
+                entity.add(new VelocityComponent(xVelComp * 40, yVelComp * 40, 40));
+                entity.add(new CollisionComponent(14));
+                entity.add(new HomingComponent(target));
+                entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile--homing"), 32, 32, angle));
                 break;
             default:
                 return null;

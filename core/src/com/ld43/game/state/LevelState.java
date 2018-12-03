@@ -61,7 +61,8 @@ public abstract class LevelState extends State {
         Engine engine = new Engine();
 
         //N.B. BoatVelocitySystem and GameConditionSystem must be added in individual level create methods
-        engine.addSystem(new MovementSystem());
+        engine.addSystem(new MovementSystem(10));
+        engine.addSystem(new HomingSystem(0));
         engine.addSystem(new ProjectileLauncherSystem());
         engine.addSystem(new HealthUpdateSystem());
         engine.addSystem(new ProjectileCollisionSystem());

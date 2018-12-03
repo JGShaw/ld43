@@ -55,11 +55,9 @@ public class BoatProjectileLauncherSystem extends EntitySystem {
                         continue;
                     }
 
-                    float angle = (float) com.ld43.game.math.MathUtils.angleBetweenPoints(position.x, position.y, towerPosition.x, towerPosition.y);
                     float random = (float) (-(projectileLauncher.aimVariance) + Math.random() * (projectileLauncher.aimVariance * 2));
 
-                    Entity p = ProjectileBuilder.projectile(projectileId, false, position.x, position.y, angle + random);
-
+                    Entity p = ProjectileBuilder.projectile(projectileId, false, position.x, position.y, tower, random);
                     getEngine().addEntity(p);
                 }
 
