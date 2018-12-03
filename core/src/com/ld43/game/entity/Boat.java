@@ -26,7 +26,8 @@ public class Boat {
         boat.add(new HealthComponent(100, 100, "boat-0--sunk"));
 
         boat.add(new ProjectileLauncherComponent(
-                Collections.singletonList(new ProjectileTimer(ProjectileType.PROJECTILE_SMALL, 0.5f,0 ))
+                Collections.singletonList(new ProjectileTimer(ProjectileType.PROJECTILE_SMALL, 0.5f,0 )),
+                0.3f
             )
         );
 
