@@ -35,7 +35,8 @@ public class TextureRegistry {
 
     public static void loadTextures(){
 
-        registerTexture("projectile--small", "entities/projectiles/small.png");
+        registerTexture("projectile-enemy-small", "entities/projectiles/small-enemy.png");
+        registerTexture("projectile-friendly-small", "entities/projectiles/small-friendly.png");
         registerTexture("projectile--medium", "entities/projectiles/medium.png");
         registerTexture("projectile--large", "entities/projectiles/large.png");
         registerTexture("projectile--huge", "entities/projectiles/huge.png");

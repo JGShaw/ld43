@@ -30,7 +30,7 @@ public class Tower {
         availableProjectiles.add(new ProjectileTimer(ProjectileType.PROJECTILE_LARGE, 6f, 2f));
         availableProjectiles.add(new ProjectileTimer(ProjectileType.PROJECTILE_MEDIUM, 3f, 1f));
         availableProjectiles.add(new ProjectileTimer(ProjectileType.PROJECTILE_SMALL, 0.5f, 0f));
-        tower.add(new ProjectileLauncherComponent(availableProjectiles));
+        tower.add(new ProjectileLauncherComponent(availableProjectiles, 0));
 
         tower.add(new HealthComponent(health, health));
         tower.add(new TowerTargetDeciderComponent(behaviour));

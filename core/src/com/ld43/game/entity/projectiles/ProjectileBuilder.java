@@ -20,7 +20,9 @@ public class ProjectileBuilder {
                 entity.add(new ProjectileComponent(10, enemy));
                 entity.add(new VelocityComponent(xVelComp * 200, yVelComp * 200, 0));
                 entity.add(new CollisionComponent(2));
-                entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile--small"), 4, 4));
+
+                String texture = enemy ? "projectile-enemy-small" : "projectile-friendly-small";
+                entity.add(new RenderableComponent(TextureRegistry.getTexture(texture), 4, 4));
                 break;
             case PROJECTILE_MEDIUM:
                 entity.add(new ProjectileComponent(15, enemy));

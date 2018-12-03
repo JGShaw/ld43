@@ -9,10 +9,12 @@ import java.util.List;
 public class ProjectileLauncherComponent implements Component {
 
     public List<ProjectileTimer> availableProjectiles;
+    public float aimVariance;
     public boolean enabled;
 
-    public ProjectileLauncherComponent(List<ProjectileTimer> availableProjectiles){
+    public ProjectileLauncherComponent(List<ProjectileTimer> availableProjectiles, float aimVariance){
         this.availableProjectiles = availableProjectiles;
+        this.aimVariance = aimVariance;
     }
 
     public void updateTimeouts(final float deltaTime){

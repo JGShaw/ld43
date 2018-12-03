@@ -11,9 +11,11 @@ import java.util.List;
 public class RouteComponent implements Component {
     public List<Tile> route;
     public Tile from;
+    public int maxRouteSize;
 
-    public RouteComponent(List<Tile> route){
+    public RouteComponent(List<Tile> route, int maxRouteSize){
         this.route = route;
+        this.maxRouteSize = maxRouteSize;
     }
 
     public double getAngle(float x, float y) {
@@ -38,10 +40,40 @@ public class RouteComponent implements Component {
     }
 
     public void addToPath(Tile tile) {
-        route.add(tile);
+        if(isValidPath(tile)) { route.add(tile); }
     }
 
-    public float[] polylinePoints() {
+    private boolean isValidPath(Tile tile) {
+        if (tile.isSolid()) {return false; }
+        if(route.isEmpty()) { return true; }
+        if(route.size() >= maxRouteSize) { return false; }
+
+        Tile last = route.get(route.size() - 1);
+        if(tile == last) { return false; }
+
+        double distance = Math.sqrt(Math.pow(tile.getTileX() - last.getTileX(), 2) + Math.pow(tile.getTileY() - last.getTileY(), 2));
+        return distance < 2f;
+    }
+
+
+    public void renderRoute(ShapeRenderer renderer) {
+        float[] polyline = polylinePoints();
+
+        if (polyline.length < 4) { return; }
+
+        renderer.begin(ShapeRenderer.ShapeType.Line);
+        renderer.setColor(1, 1, 1, 0.5f);
+        renderer.polyline(polyline);
+        renderer.end();
+
+        renderer.begin(ShapeRenderer.ShapeType.Filled);
+        renderer.setColor(0,1,0,1);
+        Tile last = route.get(route.size() - 1);
+        renderer.circle(last.getX(), last.getY(), 10);
+        renderer.end();
+    }
+
+    private float[] polylinePoints() {
         List<Integer> points = new ArrayList<Integer>();
 
         if(from != null) {
@@ -59,16 +91,5 @@ public class RouteComponent implements Component {
             floats[i] = points.get(i).floatValue();
         }
         return floats;
-    }
-
-    public void renderRoute(ShapeRenderer renderer) {
-        float[] polyline = polylinePoints();
-
-        if (polyline.length < 4) { return; }
-
-        renderer.begin(ShapeRenderer.ShapeType.Line);
-        renderer.setColor(1, 1, 1, 0.5f);
-        renderer.polyline(polyline);
-        renderer.end();
     }
 }
