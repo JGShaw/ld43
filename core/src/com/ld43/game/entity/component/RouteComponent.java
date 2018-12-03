@@ -38,7 +38,8 @@ public class RouteComponent implements Component {
     }
 
     public void addToPath(Tile tile) {
-        route.add(tile);
+        if(route.isEmpty() || tile != route.get(route.size() - 1)) { route.add(tile); }
+        System.out.println(route.size());
     }
 
     public float[] polylinePoints() {
