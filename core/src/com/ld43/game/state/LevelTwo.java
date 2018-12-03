@@ -15,6 +15,7 @@ import java.util.List;
 
 import static com.ld43.game.entity.component.TowerTargetDeciderComponent.TowerBehaviour.CLOSEST;
 import static com.ld43.game.entity.component.TowerTargetDeciderComponent.TowerBehaviour.RANDOM_TARGET;
+import static com.ld43.game.entity.system.GameConditionSystem.Condition.TOWER_OR_BOATS;
 
 public class LevelTwo extends LevelState {
 
@@ -31,7 +32,7 @@ public class LevelTwo extends LevelState {
     @Override
     public void create() {
         super.create();
-        engine.addSystem(new GameConditionSystem(stateManager, StateType.LOSE, StateType.LEVEL_THREE));
+        engine.addSystem(new GameConditionSystem(stateManager, TOWER_OR_BOATS, StateType.LOSE, StateType.PROGRESS,  StateType.LEVEL_THREE));
         engine.addSystem(new BoatVelocitySystem(map));
     }
 }

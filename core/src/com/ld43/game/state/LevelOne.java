@@ -8,6 +8,7 @@ import com.ld43.game.entity.system.GameConditionSystem;
 import com.ld43.game.entity.tower.Tower;
 
 import static com.ld43.game.entity.component.TowerTargetDeciderComponent.TowerBehaviour.RANDOM_TARGET;
+import static com.ld43.game.entity.system.GameConditionSystem.Condition.TOWER_OR_BOATS;
 
 public class LevelOne extends LevelState {
 
@@ -37,7 +38,7 @@ public class LevelOne extends LevelState {
         addStartingShips();
         super.create();
 
-        engine.addSystem(new GameConditionSystem(stateManager, StateType.LOSE, StateType.LEVEL_TWO));
+        engine.addSystem(new GameConditionSystem(stateManager, TOWER_OR_BOATS, StateType.LOSE, StateType.PROGRESS, StateType.LEVEL_TWO));
         engine.addSystem(new BoatVelocitySystem(map));
     }
 }

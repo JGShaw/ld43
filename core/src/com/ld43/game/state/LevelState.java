@@ -7,7 +7,6 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.MathUtils;
@@ -26,23 +25,14 @@ public abstract class LevelState extends State {
     public Entity tower;
 
     private OrthographicCamera camera;
-    private ShapeRenderer shapeRenderer;
     private ShapeRenderer routeRenderer;
-    private SpriteBatch batch;
     public TileMap map;
 
     // Ashley ECS
     Engine engine;
 
-    Family renderable = Family.all(RenderableComponent.class, PositionComponent.class).exclude(UnderwaterComponent.class).get();
-    Family renderableUnderwater = Family.all(RenderableComponent.class, PositionComponent.class, UnderwaterComponent.class).get();
-    Family hasHealthBar = Family.all(HealthComponent.class, RenderableComponent.class, PositionComponent.class).get();
-    Family canBeFocused = Family.all(FocusableComponent.class, RenderableComponent.class, PositionComponent.class).get();
-    Family isBoat = Family.all(BoatComponent.class).get();
-    Family isProjectile = Family.all(ProjectileComponent.class).get();
-
     public LevelState(StateManager stateManager, String tileMapFileName, Engine engine, Entity tower){
-        super(stateManager);
+        super(stateManager, engine);
 
         map = TileMap.fromFile(tileMapFileName);
         if(engine != null) {
@@ -57,19 +47,8 @@ public abstract class LevelState extends State {
     }
 
     private Engine generateEngine() {
-
         Engine engine = new Engine();
-
-        //N.B. BoatVelocitySystem and GameConditionSystem must be added in individual level create methods
-        engine.addSystem(new MovementSystem());
-        engine.addSystem(new ProjectileLauncherSystem());
-        engine.addSystem(new HealthUpdateSystem());
-        engine.addSystem(new ProjectileCollisionSystem());
-        engine.addSystem(new BoatProjectileLauncherSystem());
-        engine.addSystem(new FocusedSystem());
-
         return  engine;
-
     }
 
     private void updateEntitiesAtStart() {
@@ -117,9 +96,16 @@ public abstract class LevelState extends State {
 
     @Override
     public void create() {
+        super.create();
 
-        batch = new SpriteBatch(2000);
-        shapeRenderer = new ShapeRenderer();
+        //N.B. BoatVelocitySystem and GameConditionSystem must be added in individual level create methods
+        engine.addSystem(new MovementSystem());
+        engine.addSystem(new ProjectileLauncherSystem());
+        engine.addSystem(new HealthUpdateSystem());
+        engine.addSystem(new ProjectileCollisionSystem());
+        engine.addSystem(new BoatProjectileLauncherSystem());
+        engine.addSystem(new FocusedSystem());
+
         routeRenderer = new ShapeRenderer();
 
         camera = new OrthographicCamera(31 * 32, 31 * 32);

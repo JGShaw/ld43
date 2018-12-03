@@ -7,6 +7,7 @@ import com.ld43.game.entity.system.GameConditionSystem;
 import com.ld43.game.entity.tower.Tower;
 
 import static com.ld43.game.entity.component.TowerTargetDeciderComponent.TowerBehaviour.CLOSEST;
+import static com.ld43.game.entity.system.GameConditionSystem.Condition.TOWER_OR_BOATS;
 
 public class LevelThree extends LevelState {
 
@@ -23,7 +24,7 @@ public class LevelThree extends LevelState {
     @Override
     public void create() {
         super.create();
-        engine.addSystem(new GameConditionSystem(stateManager, StateType.LOSE, StateType.WIN));
+        engine.addSystem(new GameConditionSystem(stateManager, TOWER_OR_BOATS, StateType.LOSE, StateType.WIN, StateType.WIN));
         engine.addSystem(new BoatVelocitySystem(map));
     }
 }

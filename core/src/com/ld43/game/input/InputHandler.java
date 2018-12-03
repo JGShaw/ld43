@@ -13,17 +13,24 @@ public class InputHandler extends InputAdapter {
     public static int tileTouchUpY = -1;
 
     public static boolean running;
-    public static long runningChangedAt = 0;
 
     public static int scrolled;
 
+    public static boolean[] isKeyDown = new boolean[65536];
+    public static boolean nextState;
+
     @Override
     public boolean keyUp (int down) {
-
-        if(down == 62 && System.currentTimeMillis() - runningChangedAt > 1000){
+        isKeyDown[down] = false;
+        if(down == 62){
             running = true;
-            runningChangedAt = System.currentTimeMillis();
         }
+        return false;
+    }
+
+    @Override
+    public boolean keyDown (int down) {
+        isKeyDown[down] = true;
         return false;
     }
 

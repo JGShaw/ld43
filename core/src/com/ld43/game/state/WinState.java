@@ -1,16 +1,17 @@
 package com.ld43.game.state;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 
 public class WinState extends State {
 
-    public WinState(StateManager stateManager) {
-        super(stateManager);
+    public WinState(StateManager stateManager, Engine engine) {
+        super(stateManager, engine);
     }
 
     @Override
-    void create() {
+    public void create() {
 
     }
 

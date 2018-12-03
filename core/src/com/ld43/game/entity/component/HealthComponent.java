@@ -25,13 +25,19 @@ public class HealthComponent implements Component {
 
     public void update(float deltaTime){
 
-        if(healthBetween > healthCurrent){
+        if(healthBetween != healthCurrent){
 
-            healthBetween -= Math.max((healthBetween - healthCurrent) * deltaTime, 1);
-
-            if(healthBetween <= healthCurrent){
+            if(Math.abs(healthBetween - healthCurrent) < 2){
                 healthBetween = healthCurrent;
+                return;
             }
+
+            float healthDiff = (healthCurrent - healthBetween);
+            float healthDiffMag = Math.abs(healthDiff);
+            float healthChange = Math.copySign(Math.max(healthDiffMag * deltaTime, 1), healthDiff);
+
+            healthBetween +=  healthChange;
+
         }
     }
 

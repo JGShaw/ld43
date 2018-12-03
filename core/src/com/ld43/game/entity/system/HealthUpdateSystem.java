@@ -10,13 +10,20 @@ import com.ld43.game.graphics.TextureRegistry;
 import com.ld43.game.input.InputHandler;
 
 public class HealthUpdateSystem extends EntitySystem {
+    private final boolean removeOnZero;
     private ImmutableArray<Entity> entities;
 
     private ComponentMapper<HealthComponent> hm = ComponentMapper.getFor(HealthComponent.class);
     private ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
     private ComponentMapper<RenderableComponent> rm = ComponentMapper.getFor(RenderableComponent.class);
 
-    public HealthUpdateSystem() {}
+    public HealthUpdateSystem(){
+        this(true);
+    }
+
+    public HealthUpdateSystem(boolean removeOnZero) {
+        this.removeOnZero = removeOnZero;
+    }
 
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(HealthComponent.class).get());
@@ -29,7 +36,7 @@ public class HealthUpdateSystem extends EntitySystem {
 
             health.update(deltaTime);
 
-            if(health.isDead()) {
+            if(health.isDead() && removeOnZero) {
 
                 if(health.deathTextureName != null) {
 
