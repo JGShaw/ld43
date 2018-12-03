@@ -21,7 +21,7 @@ public class InputHandler extends InputAdapter {
     public boolean keyUp (int down) {
 
         if(down == 62 && System.currentTimeMillis() - runningChangedAt > 1000){
-            running = !running;
+            running = true;
             runningChangedAt = System.currentTimeMillis();
         }
         return false;
