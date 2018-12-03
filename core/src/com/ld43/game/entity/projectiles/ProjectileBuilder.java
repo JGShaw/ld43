@@ -22,25 +22,25 @@ public class ProjectileBuilder {
                 entity.add(new CollisionComponent(2));
 
                 String texture = enemy ? "projectile-enemy-small" : "projectile-friendly-small";
-                entity.add(new RenderableComponent(TextureRegistry.getTexture(texture), 4, 4));
+                entity.add(new RenderableComponent(TextureRegistry.getTexture(texture), 4, 4, angle));
                 break;
             case PROJECTILE_MEDIUM:
                 entity.add(new ProjectileComponent(15, enemy));
                 entity.add(new VelocityComponent(xVelComp * 150, yVelComp * 150, 0));
                 entity.add(new CollisionComponent(3));
-                entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile--medium"), 6, 6));
+                entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile--medium"), 6, 6, angle));
                 break;
             case PROJECTILE_LARGE:
                 entity.add(new ProjectileComponent(30, enemy));
                 entity.add(new VelocityComponent(xVelComp * 100, yVelComp * 100, 0));
                 entity.add(new CollisionComponent(4));
-                entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile--large"), 8, 8));
+                entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile--large"), 8, 8, angle));
                 break;
             case PROJECTILE_HUGE:
                 entity.add(new ProjectileComponent(50, enemy));
                 entity.add(new VelocityComponent(xVelComp * 50, yVelComp * 50, 0));
-                entity.add(new CollisionComponent(7));
-                entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile--huge"), 14, 14));
+                entity.add(new CollisionComponent(14));
+                entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile--huge"), 32, 32, angle));
                 break;
             default:
                 return null;
