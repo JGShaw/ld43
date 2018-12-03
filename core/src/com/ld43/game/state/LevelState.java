@@ -10,39 +10,108 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Affine2;
+import com.badlogic.gdx.math.MathUtils;
 import com.ld43.game.entity.component.*;
 import com.ld43.game.entity.system.*;
 import com.ld43.game.input.InputHandler;
 import com.ld43.game.map.TileMap;
+import com.ld43.game.map.tiles.Tile;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public abstract class LevelState extends State {
 
     public static final int NUM_OF_TILES = 31;
 
-    public List<Entity> availableBoats;
     public Entity tower;
 
     private OrthographicCamera camera;
     private ShapeRenderer shapeRenderer;
     private ShapeRenderer routeRenderer;
     private SpriteBatch batch;
-    private TileMap map;
+    public TileMap map;
 
     // Ashley ECS
-    Engine engine = new Engine();
+    Engine engine;
 
     Family renderable = Family.all(RenderableComponent.class, PositionComponent.class).exclude(UnderwaterComponent.class).get();
     Family renderableUnderwater = Family.all(RenderableComponent.class, PositionComponent.class, UnderwaterComponent.class).get();
     Family hasHealthBar = Family.all(HealthComponent.class, RenderableComponent.class, PositionComponent.class).get();
     Family canBeFocused = Family.all(FocusableComponent.class, RenderableComponent.class, PositionComponent.class).get();
+    Family isBoat = Family.all(BoatComponent.class).get();
+    Family isProjectile = Family.all(ProjectileComponent.class).get();
 
-    public LevelState(StateManager stateManager, String tileMapFileName, List<Entity> availableBoats, Entity tower){
+    public LevelState(StateManager stateManager, String tileMapFileName, Engine engine, Entity tower){
         super(stateManager);
+
         map = TileMap.fromFile(tileMapFileName);
-        this.availableBoats = availableBoats;
+        if(engine != null) {
+            this.engine = engine;
+        } else {
+            this.engine = generateEngine();
+        }
         this.tower = tower;
+
+        InputHandler.running = false;
+
+    }
+
+    private Engine generateEngine() {
+
+        Engine engine = new Engine();
+
+        //N.B. BoatVelocitySystem and GameConditionSystem must be added in individual level create methods
+        engine.addSystem(new MovementSystem());
+        engine.addSystem(new ProjectileLauncherSystem());
+        engine.addSystem(new HealthUpdateSystem());
+        engine.addSystem(new ProjectileCollisionSystem());
+        engine.addSystem(new BoatProjectileLauncherSystem());
+        engine.addSystem(new FocusedSystem());
+
+        return  engine;
+
+    }
+
+    private void updateEntitiesAtStart() {
+
+        ImmutableArray<Entity> availableShips = engine.getEntitiesFor(isBoat);
+
+        int numShips = availableShips.size();
+
+        float angleBetween = MathUtils.PI2 / numShips;
+
+        for (int i = 0; i < numShips; i++) {
+            float angle = i * angleBetween;
+
+            float x = 496 + (float)Math.sin(angle) * 460;
+            float y = 496 + (float)Math.cos(angle) * 460;
+
+            Entity boat = availableShips.get(i);
+            PositionComponent pos = boat.getComponent(PositionComponent.class);
+            pos.x = x;
+            pos.y = y;
+            VelocityComponent vel = boat.getComponent(VelocityComponent.class);
+            vel.x = 0;
+            vel.y = 0;
+            RenderableComponent ren = boat.getComponent(RenderableComponent.class);
+            ren.rotation = angle + MathUtils.PI;
+            RouteComponent rc = boat.getComponent(RouteComponent.class);
+            rc.route = new ArrayList<Tile>();
+            rc.from = null;
+
+        }
+
+        //Remove all projectiles
+        for(Entity projectile: engine.getEntitiesFor(isProjectile)){
+            engine.removeEntity(projectile);
+        }
+
+        //Set all to unfocused
+        for(Entity focusable: engine.getEntitiesFor(canBeFocused)){
+            FocusableComponent fc = focusable.getComponent(FocusableComponent.class);
+            fc.focused = false;
+        }
+
 
     }
 
@@ -60,19 +129,8 @@ public abstract class LevelState extends State {
         InputHandler inputProcessor = new InputHandler();
         Gdx.input.setInputProcessor(inputProcessor);
 
-        engine.addSystem(new MovementSystem());
-        engine.addSystem(new BoatVelocitySystem(map));
-        engine.addSystem(new ProjectileLauncherSystem());
-        engine.addSystem(new HealthUpdateSystem());
-        engine.addSystem(new ProjectileCollisionSystem());
-        engine.addSystem(new BoatProjectileLauncherSystem());
-        engine.addSystem(new FocusedSystem());
-        engine.addSystem(new GameConditionSystem(stateManager, new LoseState(stateManager), new WinState(stateManager)));
-
+        updateEntitiesAtStart();
         engine.addEntity(tower);
-        for (Entity boat: availableBoats) {
-            engine.addEntity(boat);
-        }
 
     }
 

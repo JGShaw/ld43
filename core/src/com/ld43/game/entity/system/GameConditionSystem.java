@@ -6,20 +6,17 @@ import com.ld43.game.entity.component.BoatComponent;
 import com.ld43.game.entity.component.PositionComponent;
 import com.ld43.game.entity.component.TowerComponent;
 import com.ld43.game.entity.component.VelocityComponent;
-import com.ld43.game.state.State;
-import com.ld43.game.state.StateManager;
-import com.ld43.game.state.WinState;
+import com.ld43.game.state.*;
+
+import java.util.*;
 
 public class GameConditionSystem extends EntitySystem {
 
     private StateManager stateManager;
-    private State winState;
-    private State loseState;
+    private State.StateType winState;
+    private State.StateType loseState;
 
-    private ImmutableArray<Entity> boats;
-    private ImmutableArray<Entity> towers;
-
-    public GameConditionSystem(StateManager stateManager, State loseState, State winState) {
+    public GameConditionSystem(StateManager stateManager, State.StateType loseState, State.StateType winState) {
         this.stateManager = stateManager;
         this.winState = winState;
         this.loseState = loseState;
@@ -31,14 +28,36 @@ public class GameConditionSystem extends EntitySystem {
 
     public void update(float deltaTime) {
 
-        boats = getEngine().getEntitiesFor(Family.all(BoatComponent.class).get());
-        towers = getEngine().getEntitiesFor(Family.all(TowerComponent.class).get());
+        ImmutableArray<Entity> boats = getEngine().getEntitiesFor(Family.all(BoatComponent.class).get());
+        ImmutableArray<Entity> towers = getEngine().getEntitiesFor(Family.all(TowerComponent.class).get());
+
+        List<Entity> boatList = Arrays.asList(boats.toArray());
 
         if(towers.size() == 0) {
-            stateManager.push(winState);
+            stateManager.push(generateState(winState, getEngine()));
         } else if(boats.size() == 0) {
-            stateManager.push(loseState);
+            stateManager.push(generateState(loseState, getEngine()));
         }
 
+    }
+
+    private State generateState(State.StateType stateType, Engine engine){
+
+        switch (stateType){
+            case WIN:
+                return new WinState(stateManager);
+            case LOSE:
+                return new LoseState(stateManager);
+            case PROGRESS:
+                return new ProgressState(stateManager);
+            case LEVEL_ONE:
+                return new LevelOne(stateManager);
+            case LEVEL_TWO:
+                return new LevelTwo(stateManager, engine);
+            case LEVEL_THREE:
+                return new LevelThree(stateManager, engine);
+        }
+
+        return null;
     }
 }
