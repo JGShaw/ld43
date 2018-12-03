@@ -38,6 +38,12 @@ public class ProgressState extends State {
         engine.addSystem(new GameConditionSystem(stateManager, GameConditionSystem.Condition.NONE, StateType.LEVEL_ONE, next, StateType.WIN));
 
         InputHandler.nextState = false;
+
+        //Remove all projectiles
+        for(Entity projectile: engine.getEntitiesFor(isProjectile)){
+            engine.removeEntity(projectile);
+        }
+
     }
 
     @Override
