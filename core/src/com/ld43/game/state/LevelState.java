@@ -17,6 +17,7 @@ import com.ld43.game.map.TileMap;
 import com.ld43.game.map.tiles.Tile;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class LevelState extends State {
 
@@ -55,7 +56,15 @@ public abstract class LevelState extends State {
 
         ImmutableArray<Entity> availableShips = engine.getEntitiesFor(isBoat);
 
-        int numShips = availableShips.size();
+        List<Entity> boatsAlive = new ArrayList<Entity>();
+        for(Entity boat: availableShips){
+            HealthComponent hc = boat.getComponent(HealthComponent.class);
+            if(!hc.isDead()){
+                boatsAlive.add(boat);
+            }
+        }
+
+        int numShips = boatsAlive.size();
 
         float angleBetween = MathUtils.PI2 / numShips;
 
@@ -65,7 +74,7 @@ public abstract class LevelState extends State {
             float x = 496 + (float)Math.sin(angle) * 460;
             float y = 496 + (float)Math.cos(angle) * 460;
 
-            Entity boat = availableShips.get(i);
+            Entity boat = boatsAlive.get(i);
             PositionComponent pos = boat.getComponent(PositionComponent.class);
             pos.x = x;
             pos.y = y;
