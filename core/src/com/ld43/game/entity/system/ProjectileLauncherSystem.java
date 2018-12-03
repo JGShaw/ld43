@@ -38,16 +38,12 @@ public class ProjectileLauncherSystem extends EntitySystem {
 
             if(projectileId != null) {
 
-                float angle = targetDecider.getAngle(position.x, position.y, getEngine());
+                Entity target = targetDecider.getTarget(position.x, position.y, getEngine());
 
-                if(Float.isNaN(angle)) {
-                    projectileLauncher.setAvailable(projectileId);
-                    continue;
+                if(target != null) {
+                    Entity p = ProjectileBuilder.projectile(projectileId, true, position.x, position.y, target);
+                    getEngine().addEntity(p);
                 }
-
-                Entity p = ProjectileBuilder.projectile(projectileId, true, position.x, position.y, angle);
-
-                getEngine().addEntity(p);
             }
         }
     }

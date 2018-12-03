@@ -39,7 +39,7 @@ public class TowerTargetDeciderComponent implements Component {
         this.behaviour = behaviour;
     }
 
-    public float getAngle(float towerX, float towerY, Engine engine) {
+    public Entity getTarget(float towerX, float towerY, Engine engine) {
 
         ImmutableArray<Entity> boats = engine.getEntitiesFor(familyBoat);
 
@@ -66,28 +66,26 @@ public class TowerTargetDeciderComponent implements Component {
                 return randomTarget(towerX, towerY, inRange);
             case RANDOM:
             default:
-                return Float.NaN;
+                return null;
         }
 
     }
 
-    private float randomTarget(float towerX, float towerY, List<Entity> boats) {
+    private Entity randomTarget(float towerX, float towerY, List<Entity> boats) {
 
         if(boats.size() == 0){
-            return Float.NaN;
+            return null;
         } else {
-            Entity random = boats.get(MathUtils.random(0, boats.size()-1));
-            PositionComponent pos = pm.get(random);
-            return (float)com.ld43.game.math.MathUtils.angleBetweenPoints(towerX, towerY, pos.x, pos.y);
+            return boats.get(MathUtils.random(0, boats.size()-1));
         }
 
     }
 
-    private float getClosest(float towerX, float towerY, List<Entity> boats){
+    private Entity getClosest(float towerX, float towerY, List<Entity> boats){
 
-        if(boats.size() == 0) return Float.NaN;
+        if(boats.size() == 0) return null;
 
-        PositionComponent closest = null;
+        Entity closest = null;
         float closestDistance = Float.MAX_VALUE;
 
         for(Entity boat: boats){
@@ -96,49 +94,36 @@ public class TowerTargetDeciderComponent implements Component {
 
             float distanceBetween = (float)Math.sqrt(Math.pow(pos.x - towerX, 2) + Math.pow(pos.y - towerY, 2));
             if(distanceBetween < closestDistance){
-                closest = pos;
+                closest = boat;
                 closestDistance = distanceBetween;
             }
         }
-
-        if(closest == null){
-            return MathUtils.random(0, MathUtils.PI2);
-        } else {
-            return (float)com.ld43.game.math.MathUtils.angleBetweenPoints(towerX, towerY, closest.x, closest.y);
-        }
-
+        return closest;
     }
 
-    private float getLowestMagnitudeHealth(float towerX, float towerY, List<Entity> boats) {
+    private Entity getLowestMagnitudeHealth(float towerX, float towerY, List<Entity> boats) {
 
-        if(boats.size() == 0) return Float.NaN;
+        if(boats.size() == 0) return null;
 
-        PositionComponent target = null;
+        Entity target = null;
         float lowestHealth = Float.MAX_VALUE;
 
         for(Entity boat: boats){
-
             HealthComponent health = hm.get(boat);
 
             if(health.healthCurrent < lowestHealth){
-                target = pm.get(boat);
+                target = boat;
                 lowestHealth = health.healthCurrent;
             }
         }
-
-        if(target == null){
-            return MathUtils.random(0, MathUtils.PI2);
-        } else {
-            return (float)com.ld43.game.math.MathUtils.angleBetweenPoints(towerX, towerY, target.x, target.y);
-        }
-
+        return target;
     }
 
-    private float getLowestPercentageHealth(float towerX, float towerY, List<Entity> boats) {
+    private Entity getLowestPercentageHealth(float towerX, float towerY, List<Entity> boats) {
 
-        if(boats.size() == 0) return Float.NaN;
+        if(boats.size() == 0) return null;
 
-        PositionComponent target = null;
+        Entity target = null;
         float lowestHealth = Float.MAX_VALUE;
 
         for(Entity boat: boats){
@@ -148,24 +133,18 @@ public class TowerTargetDeciderComponent implements Component {
             float percentageHealth = health.healthCurrent / health.healthMax;
 
             if(percentageHealth < lowestHealth){
-                target = pm.get(boat);
+                target = boat;
                 lowestHealth = percentageHealth;
             }
         }
-
-        if(target == null){
-            return MathUtils.random(0, MathUtils.PI2);
-        } else {
-            return (float)com.ld43.game.math.MathUtils.angleBetweenPoints(towerX, towerY, target.x, target.y);
-        }
-
+        return target;
     }
 
-    private float getHighestMagnitudeHealth(float towerX, float towerY, List<Entity> boats) {
+    private Entity getHighestMagnitudeHealth(float towerX, float towerY, List<Entity> boats) {
 
-        if(boats.size() == 0) return Float.NaN;
+        if(boats.size() == 0) return null;
 
-        PositionComponent target = null;
+        Entity target = null;
         float highestHealth = 0;
 
         for(Entity boat: boats){
@@ -173,24 +152,18 @@ public class TowerTargetDeciderComponent implements Component {
             HealthComponent health = hm.get(boat);
 
             if(health.healthCurrent > highestHealth){
-                target = pm.get(boat);
+                target = boat;
                 highestHealth = health.healthCurrent;
             }
         }
-
-        if(target == null){
-            return MathUtils.random(0, MathUtils.PI2);
-        } else {
-            return (float)com.ld43.game.math.MathUtils.angleBetweenPoints(towerX, towerY, target.x, target.y);
-        }
-
+        return target;
     }
 
-    private float getHighestPercentageHealth(float towerX, float towerY, List<Entity> boats) {
+    private Entity getHighestPercentageHealth(float towerX, float towerY, List<Entity> boats) {
 
-        if(boats.size() == 0) return Float.NaN;
+        if(boats.size() == 0) return null;
 
-        PositionComponent target = null;
+        Entity target = null;
         float highestHealth = 0;
 
         for(Entity boat: boats){
@@ -200,16 +173,11 @@ public class TowerTargetDeciderComponent implements Component {
             float percentageHealth = health.healthCurrent / health.healthMax;
 
             if(percentageHealth > highestHealth){
-                target = pm.get(boat);
+                target = boat;
                 highestHealth = percentageHealth;
             }
         }
-
-        if(target == null){
-            return MathUtils.random(0, MathUtils.PI2);
-        } else {
-            return (float)com.ld43.game.math.MathUtils.angleBetweenPoints(towerX, towerY, target.x, target.y);
-        }
+        return target;
 
     }
 
