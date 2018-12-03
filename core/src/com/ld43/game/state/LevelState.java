@@ -109,6 +109,7 @@ public abstract class LevelState extends State {
 
         //N.B. BoatVelocitySystem and GameConditionSystem must be added in individual level create methods
         engine.addSystem(new MovementSystem(10));
+        engine.addSystem(new SeaMineSystem(0));
         engine.addSystem(new HomingSystem(0));
         engine.addSystem(new ProjectileLauncherSystem());
         engine.addSystem(new HealthUpdateSystem());
@@ -152,7 +153,21 @@ public abstract class LevelState extends State {
 
         batch.begin();
         renderEntities(renderable);
+
+        ImmutableArray<Entity> seaMines = engine.getEntitiesFor(Family.all(SeaMineComponent.class).get());
+        for (Entity entity : seaMines) {
+            RenderableComponent rc = entity.getComponent(RenderableComponent.class);
+            PositionComponent pc = entity.getComponent(PositionComponent.class);
+            SeaMineComponent sc = entity.getComponent(SeaMineComponent.class);
+
+            Affine2 rotation = new Affine2().translate(pc.x, pc.y).rotateRad(-rc.rotation).scale(1 + sc.z, 1 + sc.z).translate(-rc.width / 2, -rc.height / 2);
+            batch.draw(rc.texture, rc.width, rc.height, rotation);
+        }
+
+
         batch.end();
+
+
 
         renderHealthBars();
 

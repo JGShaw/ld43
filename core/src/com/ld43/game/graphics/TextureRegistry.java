@@ -41,6 +41,7 @@ public class TextureRegistry {
         registerTexture("projectile--large", "entities/projectiles/large.png");
         registerTexture("projectile--huge", "entities/projectiles/huge.png");
         registerTexture("projectile--homing", "entities/projectiles/homing.png");
+        registerTexture("projectile--sea-mine", "entities/projectiles/projectile--sea-mine.png");
 
         registerTexture("tile-water--0", "tiles/tileMap.png", 0, 0, 32, 32);
         registerTexture("tile-water--1", "tiles/tileMap.png", 32, 0, 32, 32);

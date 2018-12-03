@@ -8,14 +8,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Affine2;
-import com.badlogic.gdx.math.MathUtils;
 import com.ld43.game.entity.component.FocusableComponent;
 import com.ld43.game.entity.component.HealthComponent;
 import com.ld43.game.entity.component.RenderableComponent;
 import com.ld43.game.entity.system.GameConditionSystem;
 import com.ld43.game.entity.system.HealthUpdateSystem;
 import com.ld43.game.input.InputHandler;
-import sun.java2d.InvalidPipeException;
 
 public class ProgressState extends State {
 

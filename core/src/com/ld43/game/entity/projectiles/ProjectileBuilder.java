@@ -56,6 +56,16 @@ public class ProjectileBuilder {
                 entity.add(new HomingComponent(target));
                 entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile--homing"), 32, 32, angle));
                 break;
+            case PROJECTILE_SEA_MINE:
+                angle = MathUtils.random(0, MathUtils.PI2);
+                float speed = MathUtils.random(75f, 95f);
+                xVelComp = MathUtils.sin(angle);
+                yVelComp = MathUtils.cos(angle);
+                entity.add(new VelocityComponent(xVelComp * speed, yVelComp * speed, speed));
+                entity.add(new CollisionComponent(14));
+                entity.add(new SeaMineComponent(0.1f, 0.3f, -0.15f));
+                entity.add(new RenderableComponent(TextureRegistry.getTexture("projectile--sea-mine"), 32, 32, angle));
+                break;
             default:
                 return null;
         }

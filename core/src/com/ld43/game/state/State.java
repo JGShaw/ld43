@@ -24,8 +24,8 @@ public abstract class State {
     public SpriteBatch batch;
 
 
-    Family renderable = Family.all(RenderableComponent.class, PositionComponent.class).exclude(UnderwaterComponent.class).get();
-    Family renderableUnderwater = Family.all(RenderableComponent.class, PositionComponent.class, UnderwaterComponent.class).get();
+    Family renderable = Family.all(RenderableComponent.class, PositionComponent.class).exclude(UnderwaterComponent.class, SeaMineComponent.class).get();
+    Family renderableUnderwater = Family.all(RenderableComponent.class, PositionComponent.class, UnderwaterComponent.class).exclude(SeaMineComponent.class).get();
     Family hasHealthBar = Family.all(HealthComponent.class, RenderableComponent.class, PositionComponent.class).get();
     Family canBeFocused = Family.all(FocusableComponent.class, RenderableComponent.class, PositionComponent.class).get();
     Family isBoat = Family.all(BoatComponent.class, RenderableComponent.class, HealthComponent.class).get();
