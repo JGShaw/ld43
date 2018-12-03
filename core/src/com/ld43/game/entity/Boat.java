@@ -22,7 +22,7 @@ public class Boat {
         boat.add(new BoatComponent());
 
         List<Tile> waypoints = new ArrayList<Tile>();
-        boat.add(new RouteComponent(waypoints));
+        boat.add(new RouteComponent(waypoints, 40));
         boat.add(new HealthComponent(100, 100, "boat-0--sunk"));
 
         boat.add(new ProjectileLauncherComponent(

@@ -11,9 +11,11 @@ import java.util.List;
 public class RouteComponent implements Component {
     public List<Tile> route;
     public Tile from;
+    public int maxRouteSize;
 
-    public RouteComponent(List<Tile> route){
+    public RouteComponent(List<Tile> route, int maxRouteSize){
         this.route = route;
+        this.maxRouteSize = maxRouteSize;
     }
 
     public double getAngle(float x, float y) {
@@ -38,8 +40,19 @@ public class RouteComponent implements Component {
     }
 
     public void addToPath(Tile tile) {
-        if(route.isEmpty() || tile != route.get(route.size() - 1)) { route.add(tile); }
-        System.out.println(route.size());
+        if(isValidPath(tile)) { route.add(tile); }
+    }
+
+    private boolean isValidPath(Tile tile) {
+        if (tile.isSolid()) {return false; }
+        if(route.isEmpty()) { return true; }
+        if(route.size() >= maxRouteSize) { return false; }
+
+        Tile last = route.get(route.size() - 1);
+        if(tile == last) { return false; }
+
+        double distance = Math.sqrt(Math.pow(tile.getTileX() - last.getTileX(), 2) + Math.pow(tile.getTileY() - last.getTileY(), 2));
+        return distance < 2f;
     }
 
     public float[] polylinePoints() {
