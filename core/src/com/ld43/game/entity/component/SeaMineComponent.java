@@ -6,11 +6,14 @@ public class SeaMineComponent implements Component {
     public float z;
     public float zVel;
     public float gravity;
+    public boolean landed;
+    public float time;
 
     public SeaMineComponent(float z, float zVel, float gravity){
         this.z = z;
         this.zVel = zVel;
         this.gravity = gravity;
+        this.landed = false;
     }
 
 }

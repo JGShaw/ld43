@@ -12,7 +12,7 @@ import static com.ld43.game.entity.system.GameConditionSystem.Condition.TOWER_OR
 
 public class LevelOne extends LevelState {
 
-    public static final int TOWER_HEALTH = 100;
+    public static final int TOWER_HEALTH = 1000;
     private static final int NUMBER_OF_SHIPS = 8;
 
     public LevelOne(StateManager stateManager) {

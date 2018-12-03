@@ -28,11 +28,14 @@ public class SeaMineSystem extends EntitySystem {
             PositionComponent pc = pm.get(entity);
             SeaMineComponent seaMine = smm.get(entity);
 
-            if (seaMine.z <= 0) {
-                velocity.x = 0;
-                velocity.y = 0;
-
-                entity.add(new UnderwaterComponent());
+            if(seaMine.landed){
+                seaMine.time += deltaTime * 1.5;
+                seaMine.z = (float)Math.sin(-seaMine.time) * 0.1f + 0.1f;
+                if(seaMine.z > 0.1f){
+                    entity.remove(UnderwaterComponent.class);
+                } else {
+                    entity.add(new UnderwaterComponent());
+                }
 
                 for(Entity boat: getEngine().getEntitiesFor(Family.all(BoatComponent.class).get())){
 
@@ -49,6 +52,15 @@ public class SeaMineSystem extends EntitySystem {
 
 
                 }
+                continue;
+            }
+
+            if (seaMine.z <= 0) {
+                seaMine.landed = true;
+                velocity.x = 0;
+                velocity.y = 0;
+
+                entity.add(new UnderwaterComponent());
 
             } else {
                 entity.getComponent(RenderableComponent.class).rotation += MathUtils.PI2 * deltaTime;
