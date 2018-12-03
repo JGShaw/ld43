@@ -144,17 +144,8 @@ public abstract class LevelState extends State {
         batch.end();
 
         renderRoutes();
-
         batch.begin();
-        map.render(batch);
-        batch.end();
-
-        renderFocused();
-
-        batch.begin();
-        renderEntities(renderable);
-
-        ImmutableArray<Entity> seaMines = engine.getEntitiesFor(Family.all(SeaMineComponent.class).get());
+        ImmutableArray<Entity> seaMines = engine.getEntitiesFor(Family.all(SeaMineComponent.class, UnderwaterComponent.class).get());
         for (Entity entity : seaMines) {
             RenderableComponent rc = entity.getComponent(RenderableComponent.class);
             PositionComponent pc = entity.getComponent(PositionComponent.class);
@@ -164,6 +155,24 @@ public abstract class LevelState extends State {
             batch.draw(rc.texture, rc.width, rc.height, rotation);
         }
 
+
+        map.render(batch);
+        batch.end();
+
+        renderFocused();
+
+        batch.begin();
+        renderEntities(renderable);
+
+        ImmutableArray<Entity> flyingSeaMines = engine.getEntitiesFor(Family.all(SeaMineComponent.class).exclude(UnderwaterComponent.class).get());
+        for (Entity entity : flyingSeaMines) {
+            RenderableComponent rc = entity.getComponent(RenderableComponent.class);
+            PositionComponent pc = entity.getComponent(PositionComponent.class);
+            SeaMineComponent sc = entity.getComponent(SeaMineComponent.class);
+
+            Affine2 rotation = new Affine2().translate(pc.x, pc.y).rotateRad(-rc.rotation).scale(1 + sc.z, 1 + sc.z).translate(-rc.width / 2, -rc.height / 2);
+            batch.draw(rc.texture, rc.width, rc.height, rotation);
+        }
 
         batch.end();
 

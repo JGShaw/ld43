@@ -32,6 +32,8 @@ public class SeaMineSystem extends EntitySystem {
                 velocity.x = 0;
                 velocity.y = 0;
 
+                entity.add(new UnderwaterComponent());
+
                 for(Entity boat: getEngine().getEntitiesFor(Family.all(BoatComponent.class).get())){
 
                     PositionComponent boatPos = pm.get(boat);
